@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {{>head}}
+  </head>
+  <body>
+    <div data-role="page">
+      <div data-role="header">
+        <a href="/" data-icon="home" data-iconpos="notext">Home</a>
+        <h3>{{label}}</h3>
+      </div>
+      <div data-role="content">
+        <table>
+           <tr><th>Web Service</th><td>{{webservice_label}}</td></tr>
+           <tr><th>Requested On</th><td>{{requested_label}}</td></tr>
+           {{#completed}}
+           <tr><th>Completed On</th><td>{{completed_label}}</td></tr>
+           {{/completed}}
+           <tr><th>Data Range</th><td>{{date_start}} to {{date_end}}</td></tr>
+        </table>
+
+        {{#completed}}
+        {{>download}}
+        {{/completed}}
+        <form action="/datarequests/{{id}}/data" method="post">
+          {{>csrf}}
+          <button type="submit">{{#completed}}Re-{{/completed}}Load Data</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

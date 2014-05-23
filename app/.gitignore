@@ -1,0 +1,8 @@
+*.appcache
+rjsconf*
+
+css/lib
+js/lib
+js/*/config.js
+js/*/templates.js
+js/*/version.js

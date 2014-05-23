@@ -1,0 +1,47 @@
+{
+    "optimize": {
+        "appDir": ".",
+        "baseUrl": "js/lib",
+        "dir":     "../htdocs-build",
+        "skipDirOptimize": true,
+        "removeCombined": true,
+
+        "modules": [
+            {
+                "name": "climata_viewer"
+            }
+        ],
+        "paths": {
+            "climata_viewer": "../climata_viewer",
+            "db": "empty:"
+        }
+    },
+    "setversion": {
+       "filename": "../version.txt",
+       "jsout": "js/climata_viewer/version.js"
+    },
+    "collectjson": [
+        {
+            "paths": ["../templates"],
+            "type": "html",
+            "output": "js/climata_viewer/templates.js",
+            "json": {
+                "indent": 4
+            },
+            "jsonp": "define"
+        }
+    ],
+    "appcache": {
+        "name": "climata_viewer.appcache",
+        "css":  "css/climata_viewer.css",
+        "cache": [
+            "js/lib/require.js"
+        ],
+        "network": [
+            "*",
+            "http://*",
+            "https://*"
+        ],
+        "fallback": [""]
+    }
+}

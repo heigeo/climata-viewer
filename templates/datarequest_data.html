@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {{>head}}
+  </head>
+  <body>
+    <div data-role="page">
+      <div data-role="header">
+        <a href="/" data-icon="home" data-iconpos="notext">Home</a>
+        <h3>{{label}}</h3>
+      </div>
+      <div data-role="content">
+        <h3>Loading {{webservice_label}} Data</h3>
+        <progress data-url="/datarequests/{{id}}/status.json?task={{task_id}}"
+                  data-interval=0.25>
+          Loading...
+        </progress>
+        <div style="display:none" class="complete">
+          {{>download}}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

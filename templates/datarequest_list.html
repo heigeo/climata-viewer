@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  {{>head}}
+  <body>
+    <div data-role="page">
+      <div data-role="header">
+        <a href="/" data-icon="home" data-iconpos="notext">Home</a>
+        <h3>Data Requests</h3>
+        <a href="/datarequests/new" data-icon="add" data-iconpos="right">New Request</a>
+      </div>
+      <div data-role="content">
+        <ul data-role="listview">
+          {{#list}}
+          <li>
+            <a href="/datarequests/{{id}}">
+              <p class="ui-li-aside">{{requested_label}}</p>
+              <h3>{{label}}</h3>
+            </a>
+          </li>
+          {{/list}}
+        </ul>
+      </div>
+    </div>
+  </body>
+</html>

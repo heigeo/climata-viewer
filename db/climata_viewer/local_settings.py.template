@@ -1,0 +1,16 @@
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'climata',
+        'USER': 'climata',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
+    }
+}
+
+SECRET_KEY = (enter secret key here)
+
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+REDIS_DB=1
