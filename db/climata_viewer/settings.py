@@ -88,6 +88,10 @@ from wq.db.rest.settings import (
 WQ_SITE_MODEL = "locations.Site"
 WQ_DEFAULT_REPORT_STATUS = 1
 
+ANONYMOUS_PERMISSIONS = (
+    "data.add_datarequest",
+)
+
 
 # wq: Social auth (see http://psa.matiasaguirre.net/docs/backends/)
 AUTHENTICATION_BACKENDS = (

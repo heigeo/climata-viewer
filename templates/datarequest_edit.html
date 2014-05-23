@@ -14,14 +14,25 @@
           {{>csrf}}
           <ul>
             <li data-role="fieldcontain">
-              <label for="d-webservice">Web Service</label>
-              <select name="webservice" id="d-webservice" required>
-                <option value="">Select...</option>
+              <fieldset data-role="controlgroup">
+                <legend>Web Service</legend>
                 {{#webservice_list}}
-                {{>option}}
+                <input type="radio" id="d-webservice-{{id}}" name="webservice"
+                       value="{{id}}" required>
+                <label for="d-webservice-{{id}}">{{label}}</label>
                 {{/webservice_list}}
-              </select>
-              <p class="error datarequest-webservice_id-errors"></p>
+              </fieldset>
+              <p class="error datarequest-webservice-errors"></p>
+            </li>
+            <li data-role="fieldcontain">
+              <label for="d-region">HUC 8</label>
+              <input id="d-region" name="region" list="d-regions" required>
+              <datalist id="d-regions">
+              {{#regions}}
+                <option value="{{id}}">{{label}} ({{id}})</option>
+              {{/regions}}
+              </datalist>
+              <p class="error datarequest-region-errors"></p>
             </li>
             <li data-role="fieldcontain">
               <label for='d-date_start'>Start Date</label>

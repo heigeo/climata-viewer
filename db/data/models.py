@@ -27,6 +27,7 @@ class DataRequest(IoModel):
     webservice = models.ForeignKey(Webservice)
     requested = models.DateTimeField(auto_now=True)
     completed = models.DateTimeField(null=True, blank=True)
+    region = models.ForeignKey('locations.Region', null=True, blank=True)
     date_start = models.DateField()
     date_end = models.DateField()
 
@@ -38,20 +39,21 @@ class DataRequest(IoModel):
         return {
             'sdate': self.date_start,
             'edate': self.date_end,
-            'basin': '18010202',
+            'basin': self.region.primary_identifier.slug,
             'elems': ['avgt', 'pcpn'],
             'debug': True,
         }
 
     def __unicode__(self):
-        if self.webservice_id:
-            return "%s from %s to %s" % (
+        if self.webservice_id and self.region_id:
+            return "%s data for %s from %s to %s" % (
                 self.webservice,
+                self.region,
                 self.date_start,
                 self.date_end,
             )
         else:
-            return "New Request"
+            return "Request"
 
     class Meta:
         ordering = ("-requested",)
