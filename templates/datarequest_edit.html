@@ -1,32 +1,28 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>Request Data</title>
     {{>head}}
   </head>
   <body>
     <div data-role="page">
       <div data-role="header">
         <a href="/" data-icon="home" data-iconpos="notext">Home</a>
-        <h3>{{label}}</h3>
+        <h3>Request {{#webservice}}{{label}}{{/webservice}} Data</h3>
       </div>
       <div data-role="content">
         <form action="/datarequests/" method="post" data-ajax="false">
           {{>csrf}}
+          {{#webservice}}
+          <input type="hidden" name="webservice" value="{{webservice_id}}">
+          <h3>{{label}} Options</h3>
           <ul>
-            <li data-role="fieldcontain">
-              <fieldset data-role="controlgroup">
-                <legend>Web Service</legend>
-                {{#webservice_list}}
-                <input type="radio" id="d-webservice-{{id}}" name="webservice"
-                       value="{{id}}" required>
-                <label for="d-webservice-{{id}}">{{label}}</label>
-                {{/webservice_list}}
-              </fieldset>
-              <p class="error datarequest-webservice-errors"></p>
-            </li>
+            {{^opts.basin.ignored}}
             <li data-role="fieldcontain">
               <label for="d-region">HUC 8</label>
-              <input id="d-region" name="region" list="d-regions" required>
+              <input id="d-region" name="region" list="d-regions"
+                value="{{region_id}}"
+                {{#opts.basin.required}}required{{/opts.basin.required}}>
               <datalist id="d-regions">
               {{#regions}}
                 <option value="{{id}}">{{label}} ({{id}})</option>
@@ -34,23 +30,42 @@
               </datalist>
               <p class="error datarequest-region-errors"></p>
             </li>
+            {{/opts.basin.ignored}}
+            {{^opts.station.ignored}}
             <li data-role="fieldcontain">
-              <label for='d-date_start'>Start Date</label>
-              <input name="date_start" id="d-date_start" required type="date"
-                     value="{{date_start}}">
-              <p class="error datarequest-date_start-errors"></p>
+              <label for="d-station">Station ID</label>
+              <input id="d-station" name="station" list="d-stations"
+                value="{{station_id}}"
+                {{#opts.station.required}}required{{/opts.station.required}}>
+              <datalist id="d-stations">
+              </datalist>
+              <p class="error datarequest-region-errors"></p>
             </li>
+            {{/opts.station.ignored}}
+            {{^opts.start_date.ignored}}
             <li data-role="fieldcontain">
-              <label for='d-date_end'>End Date</label>
-              <input name="date_end" id="d-date_end" required type="date"
-                     value="{{date_end}}">
-              <p class="error datarequest-date_end-errors"></p>
+              <label for='d-start_date'>Start Date</label>
+              <input name="start_date" id="d-start_date" type="date"
+                value="{{start_date}}"
+                {{#opts.start_date.required}}required{{/opts.start_date.required}}>
+              <p class="error datarequest-start_date-errors"></p>
             </li>
+            {{/opts.start_date.ignored}}
+            {{^opts.end_date.ignored}}
+            <li data-role="fieldcontain">
+              <label for='d-end_date'>End Date</label>
+              <input name="end_date" id="d-end_date" type="date"
+                value="{{end_date}}"
+                {{#opts.end_date.required}}required{{/opts.end_date.required}}>
+              <p class="error datarequest-end_date-errors"></p>
+            </li>
+            {{/opts.end_date.ignored}}
             <li data-role="fieldcontain">
               <button type="submit">Save</button>
               <p class="error datarequest-errors"></p>
             </li>
           </ul>
+          {{/webservice}}
         </form>
       </div>
     </div>

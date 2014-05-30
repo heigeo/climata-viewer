@@ -12,12 +12,16 @@
       <div data-role="content">
         <table>
            <tr><th>Web Service</th><td>{{webservice_label}}</td></tr>
-           <tr><th>Region</th><td>{{region_label}} ({{region_id}})</td></tr>
            <tr><th>Requested On</th><td>{{requested_label}}</td></tr>
            {{#completed}}
            <tr><th>Completed On</th><td>{{completed_label}}</td></tr>
            {{/completed}}
-           <tr><th>Data Range</th><td>{{date_start}} to {{date_end}}</td></tr>
+           <tr><th>Data Range</th><td>{{start_date}} to {{end_date}}</td></tr>
+           <tr><th>Filters</th><td><ul>
+             {{#inverserelationships}}
+             <li>{{item_label}}</li>
+             {{/inverserelationships}}
+           </ul></td></th></tr>
         </table>
 
         {{#completed}}

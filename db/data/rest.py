@@ -1,5 +1,7 @@
 from .models import Webservice, DataRequest
-from .serializers import DataRequestSerializer, UserSerializer
+from .serializers import (
+    WebserviceSerializer, DataRequestSerializer, UserSerializer
+)
 from wq.db.patterns.models import (
     Relationship, InverseRelationship, RelationshipType
 )
@@ -8,7 +10,10 @@ from wq.db.rest import app
 from django.contrib.auth.models import User
 
 
-app.router.register_model(Webservice)
+app.router.register_model(
+    Webservice,
+    serializer=WebserviceSerializer,
+)
 app.router.register_model(
     DataRequest,
     viewset=IoViewSet,
@@ -17,8 +22,12 @@ app.router.register_model(
 )
 app.router.register_serializer(User, UserSerializer)
 
-app.router.register_queryset(RelationshipType, RelationshipType.objects.none())
+app.router.register_queryset(
+    RelationshipType,
+    RelationshipType.objects.filter(name="Filter For")
+)
 app.router.register_queryset(Relationship, Relationship.objects.none())
 app.router.register_queryset(
-    InverseRelationship, InverseRelationship.objects.none()
+    InverseRelationship,
+    InverseRelationship.objects.filter(type__name="Filter For"),
 )
