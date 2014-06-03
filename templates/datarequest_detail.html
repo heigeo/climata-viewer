@@ -27,7 +27,7 @@
         {{#completed}}
         {{>download}}
         {{/completed}}
-        <form action="/datarequests/{{id}}/data" method="post">
+        <form action="/datarequests/{{id}}/auto" method="post">
           {{>csrf}}
           <button type="submit">{{#completed}}Re-{{/completed}}Load Data</button>
         </form>

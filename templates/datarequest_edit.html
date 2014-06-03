@@ -17,31 +17,21 @@
           <input type="hidden" name="webservice" value="{{webservice_id}}">
           <h3>{{label}} Options</h3>
           <ul>
-            {{^opts.basin.ignored}}
+            {{#inverserelationships}}
             <li data-role="fieldcontain">
-              <label for="d-region">HUC 8</label>
-              <input id="d-region" name="region" list="d-regions"
-                value="{{region_id}}"
-                {{#opts.basin.required}}required{{/opts.basin.required}}>
-              <datalist id="d-regions">
-              {{#regions}}
+              <label for="d-ir-{{type_id}}">{{type_label}}</label>
+              <input id="d-ir-{{type_id}}" list="d-choices-{{type_id}}"
+                name="inverserelationship-{{type_id}}-item_id"
+                value="{{item_id}}"
+                {{#required}}required{{/required}}>
+              <datalist id="d-choices-{{type_id}}">
+              {{#item_choices}}
                 <option value="{{id}}">{{label}} ({{id}})</option>
-              {{/regions}}
+              {{/item_choices}}
               </datalist>
-              <p class="error datarequest-region-errors"></p>
+              <p class="error datarequest-inverserelationship-{{type_id}}-errors"></p>
             </li>
-            {{/opts.basin.ignored}}
-            {{^opts.station.ignored}}
-            <li data-role="fieldcontain">
-              <label for="d-station">Station ID</label>
-              <input id="d-station" name="station" list="d-stations"
-                value="{{station_id}}"
-                {{#opts.station.required}}required{{/opts.station.required}}>
-              <datalist id="d-stations">
-              </datalist>
-              <p class="error datarequest-region-errors"></p>
-            </li>
-            {{/opts.station.ignored}}
+            {{/inverserelationships}}
             {{^opts.start_date.ignored}}
             <li data-role="fieldcontain">
               <label for='d-start_date'>Start Date</label>

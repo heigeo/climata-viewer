@@ -1,6 +1,7 @@
 from .models import Webservice, DataRequest
 from .serializers import (
-    WebserviceSerializer, DataRequestSerializer, UserSerializer
+    WebserviceSerializer, DataRequestSerializer, UserSerializer,
+    AuthedModelSerializer
 )
 from wq.db.patterns.models import (
     Relationship, InverseRelationship, RelationshipType
@@ -8,6 +9,9 @@ from wq.db.patterns.models import (
 from wq.db.contrib.dbio.views import IoViewSet
 from wq.db.rest import app
 from django.contrib.auth.models import User
+import swapper
+
+Parameter = swapper.load_model('vera', 'Parameter')
 
 
 app.router.register_model(
@@ -21,6 +25,7 @@ app.router.register_model(
     reversed=True,
 )
 app.router.register_serializer(User, UserSerializer)
+app.router.register_serializer(Parameter, AuthedModelSerializer)
 
 app.router.register_queryset(
     RelationshipType,

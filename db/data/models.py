@@ -19,6 +19,7 @@ DEFAULT_OPTIONS = (
     'parameter',
 )
 
+
 class Webservice(models.Model):
     name = models.CharField(max_length=255)
     homepage = models.URLField()
@@ -58,7 +59,7 @@ class Webservice(models.Model):
         options = []
         for name, option in self.io_class.get_filter_options().items():
             if name in DEFAULT_OPTIONS:
-               continue
+                continue
             options.append(self.describe_option(option, name))
         return options
 
@@ -69,12 +70,15 @@ class DataRequest(IoModel):
     requested = models.DateTimeField(auto_now=True)
     completed = models.DateTimeField(null=True, blank=True)
 
-    start_date = models.DateField()
-    end_date = models.DateField()
-    
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
+
     def load_io(self):
+        if hasattr(self, '_loaded_io'):
+            return self._loaded_io
         options = self.get_io_options()
-        return flattened(self.webservice.io_class, **options)
+        self._loaded_io = flattened(self.webservice.io_class, **options)
+        return self._loaded_io
 
     def get_io_options(self):
         opt_values = {
@@ -114,11 +118,11 @@ class DataRequest(IoModel):
     @property
     def state(self):
         return None
-    
+
     @property
     def county(self):
         return None
-        
+
     @property
     def basin(self):
         return self.get_filter_ids('region')
