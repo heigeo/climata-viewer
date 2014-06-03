@@ -31,10 +31,9 @@ var iropts = app.attachmentTypes.inverserelationship;
 iropts.getTypeFilter = function(page, context) {
     var webservice = context.webservice.call(context),
         from_types = [],
-        filters = ['site', 'region', 'parameter'],
+        filters = ['site', 'state', 'county', 'basin', 'parameter'],
         filterNames = {
-            'site': 'station',
-            'region': 'basin'
+            'site': 'station'
         };
 
     filters.forEach(function(field) {
@@ -54,7 +53,7 @@ iropts.getTypeFilter = function(page, context) {
 // Limit site and parameter choices to the same authority as the webservice
 // (e.g. only show Hydromet site codes for Hydromet webservices)
 iropts.getChoiceListFilter = function(type, context) {
-    if (type.from_type == 'region')
+    if (type.from_type != 'parameter' && type.from_type != 'site')
         return {};
 
     var webservice = context.webservice.call(context);

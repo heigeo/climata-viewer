@@ -1,5 +1,5 @@
 from wq.io import GisIO
-from locations.models import Region
+from locations.models import Basin
 from django.core.management.base import BaseCommand
 
 
@@ -10,7 +10,7 @@ class Command(BaseCommand):
     def handle(self, shapefile, **options):
         watersheds = GisIO(filename=shapefile)
         for id, watershed in watersheds.items():
-            region = Region.objects.find(watershed.huc_code)
-            ident = region.primary_identifier
+            basin = Basin.objects.find(watershed.huc_code)
+            ident = basin.primary_identifier
             ident.name = watershed.huc_name
             ident.save()

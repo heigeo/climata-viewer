@@ -6,6 +6,15 @@ class Site(models.IdentifiedModel, BaseSite):
     pass
 
 
-class Region(models.IdentifiedModel):
+class State(models.IdentifiedModel):
+    pass
+
+
+class County(models.IdentifiedModel):
+    class Meta:
+        verbose_name_plural = "counties"
+
+
+class Basin(models.IdentifiedModel):
     class Meta:
         ordering = ("primary_identifiers__slug",)

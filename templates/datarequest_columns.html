@@ -12,9 +12,9 @@
       <div data-role="content">
         <form action="/datarequests/{{id}}/columns" method="post">
         {{>csrf}}
-        {{#result.has_unknown}}
-        <p>One or more columns could not be identified.</p>
-        {{/result.has_unknown}}
+        {{#result.unknown_count}}
+        <p>{{result.unknown_count}} column(s) could not be identified.</p>
+        {{/result.unknown_count}}
         <table>
           {{#result.columns}}
           <tr>

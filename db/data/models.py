@@ -117,15 +117,15 @@ class DataRequest(IoModel):
 
     @property
     def state(self):
-        return None
+        return self.get_filter_ids('state')
 
     @property
     def county(self):
-        return None
+        return self.get_filter_ids('county')
 
     @property
     def basin(self):
-        return self.get_filter_ids('region')
+        return self.get_filter_ids('basin')
 
     @property
     def station(self):

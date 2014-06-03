@@ -17,11 +17,12 @@
            <tr><th>Completed On</th><td>{{completed_label}}</td></tr>
            {{/completed}}
            <tr><th>Data Range</th><td>{{start_date}} to {{end_date}}</td></tr>
-           <tr><th>Filters</th><td><ul>
-             {{#inverserelationships}}
-             <li>{{item_label}}</li>
-             {{/inverserelationships}}
-           </ul></td></th></tr>
+           {{#inverserelationships}}
+           <tr>
+             <th>{{type_label}}</th>
+             <td>{{item_label}}</td>
+           </tr>
+           {{/inverserelationships}}
         </table>
 
         {{#completed}}
