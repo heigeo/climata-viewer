@@ -95,18 +95,30 @@ class DataRequest(IoModel):
     def __unicode__(self):
         if not self.webservice_id:
             return None
-        if self.basin:
-            locs = ", ".join(self.basin)
-        elif self.station:
-            locs = ", ".join(self.station)
+        locs = (
+            (self.state or [])
+            + (self.county or [])
+            + (self.basin or [])
+            + (self.station or [])
+        )
+        if locs:
+            locs = " for %s" % ", ".join(locs)
         else:
-            locs = "SOMEWHERE"
+            locs = ""
 
-        return "%s data for %s from %s to %s" % (
+        if self.start_date and self.end_date:
+            date = " from %s to %s" % (self.start_date, self.end_date)
+        elif self.start_date:
+            date = " since %s" % self.start_date
+        elif self.end_date:
+            date = " until %s" % self.end_date
+        else:
+            date = ""
+
+        return "%s data %s%s" % (
             self.webservice,
             locs,
-            self.start_date,
-            self.end_date,
+            date,
         )
 
     def get_filter_ids(self, name):
