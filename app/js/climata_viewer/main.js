@@ -5,6 +5,7 @@ app.init(config, templates);
 
 // Initialize data import progress bar
 progress.init('datarequests/<slug>/data', onComplete, onFail);
+progress.init('datarequests/<slug>/auto', onComplete, onFail);
 
 function onComplete($progress, data) {
     $progress.siblings('.complete').show();
