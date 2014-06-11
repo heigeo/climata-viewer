@@ -20,15 +20,36 @@
             {{#inverserelationships}}
             <li data-role="fieldcontain">
               <label for="d-ir-{{type_id}}">{{type_label}}</label>
+              {{#use_select}}
+              <select id="d-ir-{{type_id}}"
+                name="inverserelationship-{{type_id}}-item_id"
+                {{#required}}required{{/required}}>
+                <option value="">
+                   {{#required}}Pick an option...{{/required}}
+                   {{^required}}Any / All{{/required}}
+                </option>
+              {{#item_choices}}
+                <option value="{{id}}">{{label}}</option>
+              {{/item_choices}}
+              </select>
+              {{/use_select}}
+              {{^use_select}}
               <input id="d-ir-{{type_id}}" list="d-choices-{{type_id}}"
                 name="inverserelationship-{{type_id}}-item_id"
                 value="{{item_id}}"
-                {{#required}}required{{/required}}>
+                {{#required}}
+                required
+                placeholder="Start typing an option..."
+                {{/required}}
+                {{^required}}
+                placeholder="Leave blank for any/all"
+                {{/required}}>
               <datalist id="d-choices-{{type_id}}">
               {{#item_choices}}
                 <option value="{{id}}">{{label}} ({{id}})</option>
               {{/item_choices}}
               </datalist>
+              {{/use_select}}
               <p class="error datarequest-inverserelationship-{{type_id}}-errors"></p>
             </li>
             {{/inverserelationships}}

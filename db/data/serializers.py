@@ -42,4 +42,8 @@ class AuthedModelSerializer(ModelSerializer):
     authority_id = SerializerMethodField("get_authority_id")
 
     def get_authority_id(self, instance):
-        return instance.primary_identifier.authority_id
+        return set([
+            ident.authority_id
+            for ident in instance.identifiers.all()
+            if ident.authority_id is not None
+        ])

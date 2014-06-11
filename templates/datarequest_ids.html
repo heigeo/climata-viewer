@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {{>head}}
+  </head>
+  <body>
+    <div data-role="page" data-url="/datarequests/{{id}}/ids">
+      <div data-role="header">
+        <a href="/" data-icon="home" data-iconpos="notext">Home</a>
+        <h3>{{label}}</h3>
+      </div>
+      <div data-role="content">
+        <form action="/datarequests/{{id}}/updateids" method="post">
+        {{>csrf}}
+        {{#result.unknown_count}}
+        <p>
+          {{result.unknown_count}} identifier(s) in the data could not be
+          identified.
+        </p>
+        <input type="hidden" name="unknown_count"
+           value="{{result.unknown_count}}">
+
+        {{/result.unknown_count}}
+        <table>
+          {{#result.types}}
+          <tr><td colspan=3><h2>{{type_label}}</h2></td></tr>
+          <tr>
+            <th>Identifier</th>
+            <th>Occurences</th>
+            <th>Resolved To</th>
+          </tr>
+          {{#ids}}
+          <tr>
+            <th>
+              <abbr title="{{#meta}}{{name}}: {{value}}
+{{/meta}}">{{value}}</abbr>
+              <input type="hidden" name="ident_{{ident_id}}_type"
+                 value="{{type_id}}">
+              <input type="hidden" name="ident_{{ident_id}}_value" 
+                 value="{{value}}">
+              {{#meta}}
+              <input type="hidden" name="ident_{{ident_id}}_{{name}}"
+                value="{{value}}">
+              {{/meta}}
+            </th>
+            <td>{{count}}</td>
+            <td>
+              {{#unknown}}
+              <select name="ident_{{ident_id}}_id">
+                {{#choices}}
+                <option value="{{id}}">{{label}}</option>
+                {{/choices}}
+              </select>
+              {{/unknown}}
+              {{^unknown}}
+              {{match}}
+              {{/unknown}}
+            </td>
+          </tr>
+          {{/ids}}
+          {{/result.types}}
+        </table>
+        <button type="submit">Update Identifiers</button>
+        </form>
+
+        <form action="/datarequests/{{id}}/data" method="post">
+          {{>csrf}}
+          <button type="submit">Load Data</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

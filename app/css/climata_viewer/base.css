@@ -8,3 +8,6 @@ li.ui-field-contain {
     color: red;
     text-align: center;
 }
+td, th {
+    text-align: center;
+}

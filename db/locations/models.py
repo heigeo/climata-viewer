@@ -3,7 +3,9 @@ from wq.db.contrib.vera.models import BaseSite
 
 
 class Site(models.IdentifiedModel, BaseSite):
-    pass
+    name = models.CharField(max_length=255, null=True, blank=True)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
 
 
 class State(models.IdentifiedModel):
