@@ -1,7 +1,8 @@
 from rest_framework.fields import Field, SerializerMethodField
-from rest_framework.serializers import ValidationError
+from rest_framework.serializers import ValidationError, Field
 from wq.db.rest.serializers import ModelSerializer
 from wq.db.rest.auth.serializers import UserSerializer
+from wq.db.contrib.chart.serializers import EventResultSerializer
 from .models import Webservice
 
 

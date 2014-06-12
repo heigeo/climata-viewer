@@ -1,7 +1,7 @@
 from wq.db.contrib.dbio.models import IoModel
 from wq.db.contrib.dbio.signals import import_complete
 from wq.db.patterns import models
-from wq.db.rest.models import get_object_id
+from wq.db.rest.models import get_object_id, get_ct
 from wq.io.util import flattened
 
 from django.dispatch import receiver
@@ -85,12 +85,24 @@ class DataRequest(IoModel):
             'debug': True,
         }
         for field in DEFAULT_OPTIONS:
-            value = getattr(self, field)
-            if isinstance(value, models.Model):
-                opt_values[field] = get_object_id(value)
-            else:
-                opt_values[field] = value
+            opt_values[field] = getattr(self, field)
         return opt_values
+
+    def get_object_id(self, obj):
+        # Try to use the same identifier that the webservice uses for
+        # this parameter/site/etc.
+        if get_ct(obj).is_identified:
+            idents = obj.identifiers.filter(
+                authority=self.webservice.authority
+            )
+        else:
+            idents = []
+
+        if len(idents) > 0:
+            return idents[0].slug
+        else:
+            # No authority-specific IDs found, use default ID for object
+            return get_object_id(obj)
 
     def __unicode__(self):
         if not self.webservice_id:
@@ -125,7 +137,7 @@ class DataRequest(IoModel):
         rels = self.inverserelationships.filter(from_content_type__name=name)
         if not rels.count():
             return None
-        return [get_object_id(rel.right) for rel in rels]
+        return [self.get_object_id(rel.right) for rel in rels]
 
     @property
     def state(self):
