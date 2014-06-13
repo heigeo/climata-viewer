@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {{>head}}
+  </head>
+  <body{{>login_class}}>
+    <div data-role="page">
+      <div data-role="header">
+        <a href="/" data-icon="home" data-iconpos="notext">Home</a>
+        <h3>{{label}}</h3>
+      </div>
+      <div data-role="content">
+        <table>
+          <tr>
+            <th>Name</th>
+            <td>{{label}}</th>
+          </tr>
+          <tr>
+            <th>Homepage</th>
+            <td><a href="{{homepage}}">{{homepage}}</a></td>
+          </tr>
+          <tr>
+            <th>Organization</th>
+            <td>
+              {{#authority}}<a href="{{homepage}}">{{label}}</a>{{/authority}}
+            </td>
+          </tr>
+          <tr>
+            <th>Filters</th>
+            <td>
+            {{#opts}}
+              {{^start_date.ignored}}&check; Start Date<br>{{/start_date.ignored}}
+              {{^end_date.ignored}}&check; End Date<br>{{/end_date.ignored}}
+              {{^state.ignored}}&check; State<br>{{/state.ignored}}
+              {{^county.ignored}}&check; County<br>{{/county.ignored}}
+              {{^basin.ignored}}&check; HUC8<br>{{/basin.ignored}}
+              {{^station.ignored}}&check; Site/Station ID<br>{{/station.ignored}}
+              {{^parameter.ignored}}&check; Parameter<br>{{/parameter.ignored}}
+            {{/opts}}
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

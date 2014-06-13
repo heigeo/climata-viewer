@@ -5,3 +5,4 @@ css/lib
 js/lib
 js/*/templates.js
 js/*/version.js
+js/*/climata_version.js

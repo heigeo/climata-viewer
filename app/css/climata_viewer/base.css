@@ -11,3 +11,13 @@ li.ui-field-contain {
 td, th {
     text-align: center;
 }
+.logged-in .logout-shown, .logged-out .login-shown {
+    display: none;
+}
+.package {
+  padding: 0.5em;
+  border: 1px solid #ddd;
+}
+.package iframe {
+  float: right;
+}

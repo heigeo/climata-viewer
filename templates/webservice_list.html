@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   {{>head}}
-  <body>
+  <body{{>login_class}}>
     <div data-role="page">
       <div data-role="header">
         <a href="/" data-icon="home" data-iconpos="notext">Home</a>
@@ -11,7 +11,11 @@
         <ul data-role="listview">
           {{#list}}
           <li data-icon="add" data-iconpos="right">
-            <a href="/datarequests/new?webservice_id={{id}}">{{label}}</a>
+            <a href="/datarequests/new?webservice_id={{id}}">
+              <h3>{{label}}</h3>
+              <p>{{authority_label}}</p>
+            </a>
+            <a href="/webservices/{{id}}" data-icon="info">More Info</a>
           </li>
           {{/list}}
         </ul>

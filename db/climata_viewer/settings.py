@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 # wq: SECRET_KEY, DEBUG and TEMPLATE_DEBUG are defined in local_settings.py
 
-ALLOWED_HOSTS = ["climata"]
+# climata: ALLOWED_HOSTS is defined in local_settings.py
 
 
 # Application definition
@@ -52,6 +52,7 @@ INSTALLED_APPS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -75,6 +76,7 @@ TEMPLATE_CONTEXT_PROCESSORS = [
     'wq.db.rest.auth.context_processors.social_auth',
     'wq.db.rest.auth.context_processors.csrftoken',
     'wq.db.rest.context_processors.version',
+    'data.context_processors.climata_version',
 ]
 
 # wq: Recommended settings unique to wq.db
@@ -88,16 +90,16 @@ from wq.db.rest.settings import (
 WQ_SITE_MODEL = "locations.Site"
 WQ_DEFAULT_REPORT_STATUS = 1
 
-ANONYMOUS_PERMISSIONS = (
-    "data.add_datarequest",
-)
-
-
 # wq: Social auth (see http://psa.matiasaguirre.net/docs/backends/)
 AUTHENTICATION_BACKENDS = (
-    'social.backends.google.GoogleOpenId',
+    'social.backends.google.GoogleOAuth2',
+    'social.backends.facebook.FacebookOAuth2',
+    'social.backends.twitter.TwitterOAuth',
+    'social.backends.github.GithubOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
+LOGIN_REDIRECT_URL = "/"
+LOGIN_ERROR_URL = "/"
 
 ROOT_URLCONF = 'climata_viewer.urls'
 

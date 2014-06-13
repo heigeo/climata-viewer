@@ -1,3 +1,5 @@
+ALLOWED_HOSTS = ['climata.example.com']
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
@@ -9,8 +11,20 @@ DATABASES = {
     }
 }
 
-SECRET_KEY = (enter secret key here)
+SECRET_KEY = ""
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ""
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ""
+
+SOCIAL_AUTH_FACEBOOK_KEY = ""
+SOCIAL_AUTH_FACEBOOK_SECRET = ""
+
+SOCIAL_AUTH_TWITTER_KEY = ""
+SOCIAL_AUTH_TWITTER_SECRET = ""
+
+SOCIAL_AUTH_GITHUB_KEY = ""
+SOCIAL_AUTH_GITHUB_SECRET = ""
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
-REDIS_DB=1
+REDIS_DB = 1

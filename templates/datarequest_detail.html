@@ -3,7 +3,7 @@
   <head>
     {{>head}}
   </head>
-  <body>
+  <body{{>login_class}}>
     <div data-role="page">
       <div data-role="header">
         <a href="/" data-icon="home" data-iconpos="notext">Home</a>
@@ -28,7 +28,7 @@
         {{#completed}}
         {{>download}}
         {{/completed}}
-        <form action="/datarequests/{{id}}/auto" method="post">
+        <form action="/datarequests/{{id}}/auto" method="post" data-json="false">
           {{>csrf}}
           <button type="submit">{{#completed}}Re-{{/completed}}Load Data</button>
         </form>

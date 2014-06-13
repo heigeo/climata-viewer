@@ -1,8 +1,10 @@
-define(["wq/store", "wq/router", "wq/pages", "db/config", "./version"],
-function(ds, router, pages, config, version) {
+define(["wq/store", "wq/router", "wq/pages", "db/config",
+        "./version", "./climata_version"],
+function(ds, router, pages, config, version, climata_version) {
 
 config.defaults = {
     'version': version,
+    'climata_version': climata_version,
     'use_select': function() {
         var info = _getContextInfo.call(this);
         var from_type = info.reltype.from_type;
@@ -15,7 +17,7 @@ config.defaults = {
         else
             filter = {};
         var choices = ds.filter({'url': url}, filter);
-        if (choices.length <= 20)
+        if (choices.length <= 200)
             return true;
         return false;
     },

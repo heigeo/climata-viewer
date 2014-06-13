@@ -1,10 +1,21 @@
-define(['wq/app', 'wq/store', 'wq/progress', './config', './templates'],
-function(app, ds, progress, config, templates) {
+define(['jquery', 'wq/app', 'wq/store', 'wq/progress',
+        './config', './templates'],
+function($, app, ds, progress, config, templates) {
 
+// Initialize wq/app and connect to auth events
 app.init(config, templates);
 
+$('body').on('login', function() {
+    $('body').addClass('logged-in');
+    $('body').removeClass('logged-out');
+});
+
+$('body').on('logout', function() {
+    $('body').addClass('logged-out');
+    $('body').removeClass('logged-in');
+});
+
 // Initialize data import progress bar
-progress.init('datarequests/<slug>/data', onComplete, onFail);
 progress.init('datarequests/<slug>/auto', onComplete, onFail);
 
 function onComplete($progress, data) {
@@ -17,9 +28,13 @@ function onFail($progress, data) {
 
 // Prefetch important data lists
 ['webservices',
- 'datarequests',
- 'parameters',
+ 'authorities',
+ 'states',
+ 'counties',
+ 'basins',
  'sites',
+ 'parameters',
+ 'datarequests',
  'relationshiptypes',
  'inverserelationships'].forEach(function(name) {
     ds.prefetch({'url': name});

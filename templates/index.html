@@ -4,18 +4,39 @@
     <title>Climata Viewer</title>
     {{>head}}
   </head>
-  <body>
+  <body{{>login_class}}>
     <div data-role="page" class="ui-page">
       <div data-role="header">
         <h1>Climata Viewer</h1>
       </div>
       <div data-role="content">
-        <ul data-role="listview" data-inset="true">
+        {{>intro}}
+        <h3 style="clear:both;">Options</h3>
+        <ul data-role="listview" data-inset="true" class="login-shown">
           <li><a href="/webservices">Request Data</a></li>
           <li><a href="/datarequests/">View Stored Requests</a></li>
+          <li><a href="/logout">Log Out</a></li>
         </ul>
-        <p>Version {{version}}</p>
-      <div>
+        <ul data-role="listview" data-inset="true" class="logout-shown">
+          <li><a href="/login">Log In</a></li>
+        </ul>
+
+        <h3>Source Packages</h3>
+        <div class="package">
+          <a href="https://github.com/heigeo/climata-viewer">climata-viewer</a> 
+          version {{version}}
+          {{>gh_start}}climata-viewer&type=fork{{>gh_end}}
+          {{>gh_start}}climata-viewer&type=watch{{>gh_end}}
+        </div>
+        <div class="package">
+          <a href="https://github.com/heigeo/climata">climata</a> 
+          version {{climata_version}}
+          {{>gh_start}}climata&type=fork{{>gh_end}}
+          {{>gh_start}}climata&type=watch{{>gh_end}}
+        </div>
+
+        {{>outro}}
+      </div>
     </div>
   </body>
 </html>

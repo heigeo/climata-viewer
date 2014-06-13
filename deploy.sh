@@ -3,6 +3,12 @@
 # Exit on error
 set -e
 
+# Save climata version to AMD module
+cd db
+CLIMATA_VERSION=`python -c "from climata.version import VERSION; print VERSION"`;
+cd ../
+echo "define(function(){return '$CLIMATA_VERSION';});" > app/js/climata_viewer/climata_version.js
+
 # Build javascript with wq.app
 cd app;
 wq build $1;

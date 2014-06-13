@@ -3,14 +3,14 @@
   <head>
     {{>head}}
   </head>
-  <body>
+  <body{{>login_class}}>
     <div data-role="page" data-url="/datarequests/{{id}}/columns">
       <div data-role="header">
         <a href="/" data-icon="home" data-iconpos="notext">Home</a>
         <h3>{{label}}</h3>
       </div>
       <div data-role="content">
-        <form action="/datarequests/{{id}}/columns" method="post">
+        <form action="/datarequests/{{id}}/columns" method="post" data-json="false">
         {{>csrf}}
         {{#result.unknown_count}}
         <p>{{result.unknown_count}} column(s) could not be identified.</p>
@@ -38,9 +38,9 @@
         <button type="submit">Update Columns</button>
         </form>
 
-        <form action="/datarequests/{{id}}/data" method="post">
+        <form action="/datarequests/{{id}}/auto" method="post">
           {{>csrf}}
-          <button type="submit">Load Data</button>
+          <button type="submit">Continue</button>
         </form>
       </div>
     </div>

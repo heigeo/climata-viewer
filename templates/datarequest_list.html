@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html>
   {{>head}}
-  <body>
+  <body{{>login_class}}>
     <div data-role="page">
       <div data-role="header">
         <a href="/" data-icon="home" data-iconpos="notext">Home</a>
         <h3>Data Requests</h3>
-        <a href="/datarequests/new" data-icon="add" data-iconpos="right">New Request</a>
+        <a href="/webservices" data-icon="add" data-iconpos="right">New Request</a>
       </div>
       <div data-role="content">
+        {{#is_authenticated}}
+        <p class="login-show">Data Requests for {{user.username}}</p>
+        {{/is_authenticated}}
         <ul data-role="listview">
           {{#list}}
           <li>
@@ -16,6 +19,11 @@
               <p class="ui-li-aside">{{requested_label}}</p>
               <h3>{{label}}</h3>
             </a>
+          </li>
+          {{/list}}
+          {{^list}}
+          <li data-icon="add" data-iconpos="right">
+            <a href="/webservices">New Request</a>
           </li>
           {{/list}}
         </ul>

@@ -12,6 +12,13 @@ class WebserviceSerializer(ModelSerializer):
 
 
 class DataRequestSerializer(ModelSerializer):
+    def from_native(self, data, files):
+        if 'user' not in data:
+            data = data.dict()
+            user = self.context['request'].user
+            data['user'] = user.pk
+        return super(DataRequestSerializer, self).from_native(data, files)
+
     def validate_option(self, attrs, field):
         if not attrs.get('webservice', None):
             return attrs

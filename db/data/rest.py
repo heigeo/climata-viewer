@@ -14,6 +14,12 @@ import swapper
 Parameter = swapper.load_model('vera', 'Parameter')
 
 
+def user_filter(qs, request):
+    if request.user and request.user.is_authenticated():
+        return qs.filter(user=request.user)
+    else:
+        return qs.none()
+
 app.router.register_model(
     Webservice,
     serializer=WebserviceSerializer,
@@ -21,6 +27,7 @@ app.router.register_model(
 app.router.register_model(
     DataRequest,
     viewset=IoViewSet,
+    filter=user_filter,
     serializer=DataRequestSerializer,
     reversed=True,
 )
