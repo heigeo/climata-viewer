@@ -23,7 +23,10 @@ function onComplete($progress, data) {
 }
 
 function onFail($progress, data) {
-    $progress.siblings('.message').html("Error loading data.");
+    $progress.siblings('.message').html(
+        "Error loading data:<br>" +
+        "<pre><code>" + data.error + "</code></pre>"
+    );
 }
 
 function onProgress($progress, data) {
