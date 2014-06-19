@@ -4,7 +4,7 @@
     {{>head}}
   </head>
   <body{{>login_class}}>
-    <div data-role="page" data-url="/datarequests/{{id}}/data">
+    <div data-role="page">
       <div data-role="header">
         <a href="/" data-icon="home" data-iconpos="notext">Home</a>
         <h3>{{label}}</h3>
@@ -18,6 +18,7 @@
         <div style="display:none" class="complete">
           {{>download}}
         </div>
+        <div class="message"></div>
       </div>
     </div>
   </body>

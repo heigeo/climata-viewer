@@ -1,6 +1,6 @@
-define(['jquery', 'wq/app', 'wq/store', 'wq/progress',
+define(['jquery', 'wq/app', 'wq/store', 'wq/pages', 'wq/progress',
         './config', './templates'],
-function($, app, ds, progress, config, templates) {
+function($, app, ds, pages, progress, config, templates) {
 
 // Initialize wq/app and connect to auth events
 app.init(config, templates);
@@ -16,14 +16,29 @@ $('body').on('logout', function() {
 });
 
 // Initialize data import progress bar
-progress.init('datarequests/<slug>/auto', onComplete, onFail);
+progress.init('datarequests/<slug>/auto', onComplete, onFail, onProgress);
 
 function onComplete($progress, data) {
     $progress.siblings('.complete').show();
 }
 
 function onFail($progress, data) {
-    $progress.siblings('.complete').html("Error loading data.").show();
+    $progress.siblings('.message').html("Error loading data.");
+}
+
+function onProgress($progress, data) {
+    $progress.siblings('.message').html(data.message || "");
+    if (data.action) {
+        var url = $progress.data('url');
+        var match = url.match(/\/datarequests\/(\d+)\/status/);
+        if (match) {
+            url = "datarequests/" + match[1] + "/" + data.action;
+            ds.getList({'url': 'datarequests'}, function(list) {
+                var context = $.extend({'result': data}, list.find(match[1]));
+                pages.go(url, 'datarequest_' + data.action, context);
+            });
+        }
+    }
 }
 
 // Prefetch important data lists
