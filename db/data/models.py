@@ -1,5 +1,5 @@
 from wq.db.contrib.dbio.models import IoModel
-from wq.db.contrib.dbio.signals import import_complete
+from wq.db.contrib.dbio.signals import import_complete, new_metadata
 from wq.db.patterns import models
 from wq.db.rest.models import get_object_id, get_ct
 from wq.io.util import flattened
@@ -67,7 +67,7 @@ class Webservice(models.Model):
 class DataRequest(IoModel):
     user = models.ForeignKey('auth.User', null=True, blank=True)
     webservice = models.ForeignKey(Webservice)
-    requested = models.DateTimeField(auto_now=True)
+    requested = models.DateTimeField(auto_now_add=True)
     completed = models.DateTimeField(null=True, blank=True)
 
     start_date = models.DateField(null=True, blank=True)
@@ -103,6 +103,13 @@ class DataRequest(IoModel):
         else:
             # No authority-specific IDs found, use default ID for object
             return get_object_id(obj)
+
+    def get_id_choices(self, model):
+        # Assume new site codes are always new sites
+        from locations.models import Site
+        if model == Site:
+            return model.objects.none()
+        return model.objects.all()
 
     def __unicode__(self):
         if not self.webservice_id:
@@ -164,8 +171,22 @@ class DataRequest(IoModel):
 
 
 @receiver(import_complete)
-def on_import_complete(sender, **kwargs):
-    instance = kwargs.get("instance", None)
-    if instance:
-        instance.completed = datetime.datetime.now()
-        instance.save()
+def on_import_complete(sender, instance=None, status=None, **kwargs):
+    if not instance:
+        return
+    instance.completed = datetime.datetime.now()
+    instance.save()
+
+
+@receiver(new_metadata)
+def on_new_metadata(sender, instance=None, object=None, identifier=None,
+                    **kwargs):
+    if not instance or not object or not identifier:
+        return
+    identifier.authority = instance.webservice.authority
+    identifier.save()
+
+    # Assume parameters with units are numeric
+    if getattr(object, 'units', None):
+        object.is_numeric = True
+        object.save()

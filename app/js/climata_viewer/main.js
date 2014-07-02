@@ -27,6 +27,7 @@ function onFail($progress, data) {
         "Error loading data:<br>" +
         "<pre><code>" + data.error + "</code></pre>"
     );
+    $progress.siblings('.retry').show();
 }
 
 function onProgress($progress, data) {
