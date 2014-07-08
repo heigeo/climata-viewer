@@ -5,6 +5,10 @@ from wq.db.rest.models import get_object_id, get_ct
 from wq.io.util import flattened
 
 from django.dispatch import receiver
+from django.core.cache import cache
+from django.utils.timezone import now
+
+
 from rest_framework.settings import import_from_string
 import datetime
 
@@ -74,11 +78,14 @@ class DataRequest(IoModel):
     end_date = models.DateField(null=True, blank=True)
 
     def load_io(self):
-        if hasattr(self, '_loaded_io'):
-            return self._loaded_io
+        key = 'req_%s' % self.pk
+        loaded_io = cache.get(key)
+        if loaded_io:
+            return loaded_io
         options = self.get_io_options()
-        self._loaded_io = flattened(self.webservice.io_class, **options)
-        return self._loaded_io
+        loaded_io = flattened(self.webservice.io_class, **options)
+        cache.set(key, loaded_io, 60 * 30)
+        return loaded_io
 
     def get_io_options(self):
         opt_values = {
@@ -174,7 +181,7 @@ class DataRequest(IoModel):
 def on_import_complete(sender, instance=None, status=None, **kwargs):
     if not instance:
         return
-    instance.completed = datetime.datetime.now()
+    instance.completed = now()
     instance.save()
 
 
