@@ -111,10 +111,14 @@ class DataRequest(IoModel):
             # No authority-specific IDs found, use default ID for object
             return get_object_id(obj)
 
-    def get_id_choices(self, model):
+    def get_id_choices(self, model, meta):
         # Assume new site codes are always new sites
         from locations.models import Site
         if model == Site:
+            lat = meta.get('latitude', None)
+            lng = meta.get('longitude', None)
+            if lat and lng:
+                return model.objects.near(float(lat), float(lng))
             return model.objects.none()
         return model.objects.all()
 
