@@ -6,11 +6,20 @@ from wq.db.contrib.vera.models import Event, Report, Parameter
 
 class ExportView(ChartView):
     def filter_by_extra(self, qs, extra):
+        # Filter by datarequest: return the latest data for all events that
+        # were affected by the datarequest.  (This is subtly different then
+        # returning only the actual data imported by the request.)
         dr = DataRequest.objects.get(pk=extra[0])
         events = Event.objects.filter(
             report__in=Report.objects.filter_by_related(dr)
         )
-        return qs.filter(event_id__in=events)
+        qs = qs.filter(event_id__in=events)
+        if dr.parameter:
+            rels = dr.inverserelationships.filter(
+                from_content_type__name='parameter'
+            )
+            qs = qs.filter(result_type=rels[0].right)
+        return qs
 
     def transform_dataframe(self, df):
         """

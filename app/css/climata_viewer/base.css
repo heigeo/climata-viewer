@@ -21,3 +21,7 @@ td, th {
 .package iframe {
   float: right;
 }
+svg {
+  width: 600px;
+  height: 300px;
+}
