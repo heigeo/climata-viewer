@@ -32,6 +32,9 @@
           {{>csrf}}
           <button type="submit">{{#completed}}Re-{{/completed}}Load Data</button>
         </form>
+        {{#completed}}
+        <svg></svg>
+        {{/completed}}
       </div>
     </div>
   </body>

@@ -84,7 +84,7 @@ class DataRequest(IoModel):
             return loaded_io
         options = self.get_io_options()
         loaded_io = flattened(self.webservice.io_class, **options)
-        cache.set(key, loaded_io, 60 * 30)
+        cache.set(key, loaded_io, 60 * 60 * 2)
         return loaded_io
 
     def get_io_options(self):
