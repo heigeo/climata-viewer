@@ -27,7 +27,7 @@ function onProgress($progress, data) {
     $progress.siblings('.message').html(data.message || "");
     var id = _getId($progress);
     if (data.action && id) {
-        url = "datarequests/" + id + "/" + data.action;
+        var url = "datarequests/" + id + "/" + data.action;
         ds.getList({'url': 'datarequests'}, function(list) {
             var context = $.extend({'result': data}, list.find(id));
             pages.go(url, 'datarequest_' + data.action, context);

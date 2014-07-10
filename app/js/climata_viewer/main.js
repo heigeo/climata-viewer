@@ -1,4 +1,4 @@
-define(['wq/app', './login', './process', './graph', 
+define(['wq/app', './login', './process', './graph',
         './config', './templates'],
 function(app, login, process, graph, config, templates) {
 
