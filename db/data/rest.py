@@ -1,7 +1,7 @@
 from .models import Webservice, DataRequest
 from .serializers import (
     WebserviceSerializer, DataRequestSerializer, UserSerializer,
-    AuthedModelSerializer
+    AuthedModelSerializer, InverseRelationshipSerializer
 )
 from wq.db.patterns.models import (
     Relationship, InverseRelationship, RelationshipType
@@ -42,4 +42,8 @@ app.router.register_queryset(Relationship, Relationship.objects.none())
 app.router.register_queryset(
     InverseRelationship,
     InverseRelationship.objects.filter(type__name="Filter For"),
+)
+app.router.register_serializer(
+    InverseRelationship,
+    InverseRelationshipSerializer
 )

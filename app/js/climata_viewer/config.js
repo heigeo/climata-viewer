@@ -2,12 +2,16 @@ define(["wq/store", "wq/router", "wq/pages", "db/config",
         "./version", "./climata_version"],
 function(ds, router, pages, config, version, climata_version) {
 
+var defaultYear = new Date().getFullYear() - 1;
+
 config.defaults = {
     'version': version,
     'climata_version': climata_version,
     'use_select': function() {
         var info = _getContextInfo.call(this);
         var from_type = info.reltype.from_type;
+        if (config.pages[from_type].partial)
+            return false;
         if (!info)
             return false;
         var url = config.pages[from_type].url;
@@ -21,6 +25,20 @@ config.defaults = {
             return true;
         return false;
     },
+    'use_remote': function() {
+        var info = _getContextInfo.call(this);
+        var from_type = info.reltype.from_type;
+        if (config.pages[from_type].partial)
+            return true;
+        else
+            return false;
+    },
+    'filter_auth': function() {
+        var info = _getContextInfo.call(this);
+        var from_type = info.reltype.from_type;
+        if (from_type == 'site')
+            return true;
+    },
     'required': function() {
         var info = _getContextInfo.call(this);
         if (!info)
@@ -31,7 +49,9 @@ config.defaults = {
         if (type_id)
             return info.webservice.opts[type_id].required;
         return false;
-    }
+    },
+    'start_date': defaultYear + '-01-01',
+    'end_date': defaultYear + '-12-31'
 };
 
 function _getContextInfo() {

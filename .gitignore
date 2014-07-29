@@ -57,3 +57,6 @@ htdocs/
 
 # Local settings
 local_settings.py
+
+# Temp files
+*.swp

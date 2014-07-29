@@ -40,11 +40,5 @@ class County(models.IdentifiedModel):
 
 
 class Basin(models.IdentifiedModel):
-    def __unicode__(self):
-        return "%s (%s)" % (
-            self.primary_identifier.slug,
-            self.primary_identifier.name
-        )
-
     class Meta:
         ordering = ("primary_identifiers__slug",)

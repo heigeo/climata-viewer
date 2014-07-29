@@ -2,6 +2,7 @@ from rest_framework.fields import Field, SerializerMethodField
 from rest_framework.serializers import ValidationError, Field
 from wq.db.rest.serializers import ModelSerializer
 from wq.db.rest.auth.serializers import UserSerializer
+from wq.db.patterns.relate.serializers import InverseRelationshipSerializer
 from wq.db.contrib.chart.serializers import EventResultSerializer
 from .models import Webservice
 
@@ -55,3 +56,14 @@ class AuthedModelSerializer(ModelSerializer):
             for ident in instance.identifiers.all()
             if ident.authority_id is not None
         ])
+
+
+class InverseRelationshipSerializer(InverseRelationshipSerializer):
+    def create_dict(self, atype, data, fields, index):
+        ident = data[fields['item_id']]
+        if u'\xa0' in ident:
+            ident = ident.split(u'\xa0')[1]
+            data[fields['item_id']] = ident
+        return super(InverseRelationshipSerializer, self).create_dict(
+            atype, data, fields, index
+        )
