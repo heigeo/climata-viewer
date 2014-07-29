@@ -23,12 +23,12 @@ function showData(id, elem) {
             })
             .label(function(dataset) {
                 return (
-                    dataset.parameter
-                    + ' at '
-                    + dataset['site id']
-                    + ' ('
-                    + dataset['site name']
-                    + ')'
+                    dataset.parameter +
+                    ' at ' +
+                    dataset['site id'] +
+                    ' (' +
+                    dataset['site name'] +
+                    ')'
                 );
             });
         svg.datum(data).call(plot);
