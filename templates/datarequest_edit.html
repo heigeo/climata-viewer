@@ -52,7 +52,10 @@
 
               {{^use_remote}}
               {{#item_choices}}
-                <option value="{{id}}">{{label}}</option>
+                <option value="{{id}}"
+                    {{#state_id}}data-state_id={{state_id}}{{/state_id}}>
+                  {{label}}
+                </option>
               {{/item_choices}}
               {{/use_remote}}
 

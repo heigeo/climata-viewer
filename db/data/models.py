@@ -159,6 +159,10 @@ class DataRequest(IoModel):
 
     @property
     def state(self):
+        opts = self.webservice.default_options
+        if self.county and not opts['state']['required']:
+            # County implies state for most climata IOs
+            return None
         return self.get_filter_ids('state')
 
     @property

@@ -35,6 +35,14 @@ class State(models.IdentifiedModel):
 
 
 class County(models.IdentifiedModel):
+    state = models.ForeignKey(State, null=True)
+
+    def __unicode__(self):
+        label = super(County, self).__unicode__()
+        if self.state and self.state.primary_identifier:
+            return "%s, %s" % (label, self.state.primary_identifier.slug)
+        return label
+
     class Meta:
         verbose_name_plural = "counties"
 

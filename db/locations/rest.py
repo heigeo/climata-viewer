@@ -6,10 +6,10 @@ from wq.db.rest import app
 # Compute whether it's feasible to cache all of the choices client side
 def cache_opts(cls):
     # See http://wq.io/docs/config
-    if cls.objects.count() > 100:
+    if cls.objects.count() > 250:
         return {'max_local_pages': 0, 'partial': True}
     else:
-        return {'per_page': 100}
+        return {'per_page': 250}
 
 app.router.register_model(
     Site,

@@ -1,5 +1,5 @@
-define(['jquery', 'wq/app', 'wq/store'],
-function($, app, ds) {
+define(['jquery', 'wq/app', 'wq/pages', 'wq/store'],
+function($, app, pages, ds) {
 
 $('body').on('login', function() {
     $('body').addClass('logged-in');
@@ -25,6 +25,7 @@ function setup() {
      'inverserelationships'].forEach(function(name) {
         ds.prefetch({'url': name});
     });
+    pages.addRoute('datarequests/new', 's', _addStateFilter);
 }
 
 // Customize inverserelationship items auto-generated for new datarequests
@@ -62,6 +63,22 @@ iropts.getChoiceListFilter = function(type, context) {
     var webservice = context.webservice.call(context);
     return {'authority_id': webservice.authority_id};
 };
+
+function _addStateFilter(match, ui, params, hash, evt, $page) {
+    ds.getList({'url': 'relationshiptypes'}, function(list) {
+        var stype = list.find('state', 'from_type');
+        var sid = "d-ir-" + stype.id;
+        var $select = $page.find('select#' + sid);
+        if (!$select)
+            return;
+        $select.change(function() {
+            var $opts = $page.find('option[data-state_id]'),
+                state = $select.val();
+            $opts.filter('[data-state_id="' + state + '"]').show();
+            $opts.filter('[data-state_id!="' + state + '"]').hide();
+        });
+    });
+}
 
 return {'setup': setup};
 
