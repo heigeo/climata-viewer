@@ -11,8 +11,18 @@ function onComplete($progress, data) {
     $progress.siblings('.complete').show();
     var id =_getId($progress);
     var elems = $progress.siblings('svg');
-    if (id && elems.length)
-        graph.showData(id, elems[0]);
+    if (id) {
+        if (elems.length)
+            graph.showData(id, elems[0]);
+        ds.getList({'url': 'datarequests'}, function(list) {
+            var req = list.find(id);
+            if (req) {
+                req.completed = true;
+                req.completed_label = 'just now';
+                list.update([req], 'id');
+            }
+        });
+    }
 }
 
 function onFail($progress, data) {

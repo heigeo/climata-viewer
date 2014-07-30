@@ -13,7 +13,12 @@
         <form action="/datarequests/{{id}}/columns" method="post" data-json="false">
         {{>csrf}}
         {{#result.unknown_count}}
-        <p>{{result.unknown_count}} column(s) could not be identified.</p>
+        <h3>Ambiguous Columns</h3>
+        <p>
+           The data contains {{result.unknown_count}} column heading(s) that
+           are not recognized by this database.  Please contact us or file a
+           ticket if you didn't expect to see this message.
+        </p>
         {{/result.unknown_count}}
         <table>
           {{#result.columns}}

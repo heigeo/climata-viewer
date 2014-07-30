@@ -13,9 +13,14 @@
         <form action="/datarequests/{{id}}/updateids" method="post" data-json="false">
         {{>csrf}}
         {{#result.unknown_count}}
+        <h3>Ambiguous Identifiers</h3>
         <p>
-          {{result.unknown_count}} identifier(s) in the data could not be
-          identified.
+          The data contains {{result.unknown_count}} site or parameter code(s)
+          that aren't recognized by this database.  These codes might
+          correspond to existing sites and parameters, or they might be new (to
+          this database).  Use the options below to match the codes to existing
+          codes already in the database, if any.  When you are done, click Save
+          Changes and then click continue after the changes are saved.
         </p>
         <input type="hidden" name="unknown_count"
            value="{{result.unknown_count}}">
@@ -25,9 +30,9 @@
           {{#result.types}}
           <tr><td colspan=3><h2>{{type_label}}</h2></td></tr>
           <tr>
-            <th>Identifier</th>
-            <th>Occurences</th>
-            <th>Resolved To</th>
+            <th>Code</th>
+            <th># Records</th>
+            <th>Resolution</th>
           </tr>
           {{#ids}}
           <tr>
@@ -60,7 +65,7 @@
           {{/ids}}
           {{/result.types}}
         </table>
-        <button type="submit">Update Identifiers</button>
+        <button type="submit">Save Changes</button>
         </form>
 
         <form action="/datarequests/{{id}}/auto" method="post">
