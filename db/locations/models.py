@@ -3,7 +3,7 @@ from wq.db.contrib.vera.models import BaseSite
 from django.contrib.gis.geos import Point
 
 
-class SiteManager(models.IdentifiedModelManager):
+class SiteManager(models.IdentifiedRelatedModelManager):
     def near(self, latitude, longitude, degrees=0.01):
         # FIXME: Real-world distance in degrees is different for lat/lng;
         # this works good enough though so whatever
@@ -23,7 +23,7 @@ class SiteManager(models.IdentifiedModelManager):
         )
 
 
-class Site(models.IdentifiedModel, BaseSite):
+class Site(models.IdentifiedRelatedModel, BaseSite):
     name = models.CharField(max_length=255, null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)

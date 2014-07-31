@@ -2,7 +2,7 @@ define(['d3', 'highlight', 'wq/pandas', 'wq/chart', 'wq/pages'],
 function(d3, highlight, pandas, chart, pages) {
 
 function setup() {
-    pages.addRoute('datarequests/<slug>', 's', _onShow);
+    pages.addRoute('.atarequests/<slug>', 's', _onShow);
     pages.addRoute('', 's', showLatest);
 }
 

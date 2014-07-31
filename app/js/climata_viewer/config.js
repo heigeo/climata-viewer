@@ -69,6 +69,11 @@ config.transitions = {
     'save': "flip"
 };
 
+config.map = {
+    'zoom': 3,
+    'center': [40, -91]
+};
+
 return config;
 
 });

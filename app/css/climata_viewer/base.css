@@ -30,3 +30,8 @@ pre {
   border: 1px solid #eee;
   padding: 1em;
 }
+
+.map {
+  border: 1px solid #333;
+  height: 300px;
+}

@@ -38,6 +38,7 @@ app.router.register_model(
     filter=user_filter,
     serializer=DataRequestSerializer,
     reversed=True,
+    map=True,
 )
 app.router.register_serializer(User, UserSerializer)
 app.router.register_serializer(Parameter, AuthedModelSerializer)

@@ -46,7 +46,7 @@ class DataRequestSerializer(ModelSerializer):
 
 class UserSerializer(UserSerializer):
     class Meta:
-        exclude = ("vera_report",)
+        exclude = ("vera_report",) + UserSerializer.Meta.exclude
 
 
 class AuthedModelSerializer(ModelSerializer):
