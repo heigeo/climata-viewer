@@ -73,6 +73,7 @@ class DataRequest(IoModel):
     webservice = models.ForeignKey(Webservice)
     requested = models.DateTimeField(auto_now_add=True)
     completed = models.DateTimeField(null=True, blank=True)
+    public = models.BooleanField(default=False)
 
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)

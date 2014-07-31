@@ -11,20 +11,17 @@
       </div>
       <div data-role="content">
         <table>
-           <tr><th>Web Service</th><td>{{webservice_label}}</td></tr>
-           <tr><th>Requested On</th><td>{{requested_label}}</td></tr>
-           {{#completed}}
-           <tr><th>Completed On</th><td>{{completed_label}}</td></tr>
-           {{/completed}}
-           <tr><th>Data Range</th><td>{{start_date}} to {{end_date}}</td></tr>
-           {{#inverserelationships}}
-           <tr>
-             <th>{{type_label}}</th>
-             <td>{{item_label}}</td>
-           </tr>
-           {{/inverserelationships}}
+          <tr><th>Web Service</th><td>{{webservice_label}}</td></tr>
+          <tr><th>Data Range</th><td>{{start_date}} to {{end_date}}</td></tr>
+          {{#inverserelationships}}
+          <tr>
+            <th>{{type_label}}</th>
+            <td>{{item_label}}</td>
+          </tr>
+          {{/inverserelationships}}
         </table>
-
+        
+        <div class="login-shown">
         {{#completed}}
         {{>download}}
         {{/completed}}
@@ -32,9 +29,20 @@
           {{>csrf}}
           <button type="submit">{{#completed}}Re-{{/completed}}Load Data</button>
         </form>
+        </div>
+
         {{#completed}}
         <svg></svg>
         {{/completed}}
+        <hr>
+        <table>
+          <tr><th>Requested On</th><td>{{requested_label}}</td></tr>
+          <tr><th>Requested By</th><td>{{user_label}}</td></tr>
+          {{#completed}}
+          <tr><th>Completed On</th><td>{{completed_label}}</td></tr>
+          <tr class="login-shown"><th>Public</th><td>{{>toggle}}</td></tr>
+          {{/completed}}
+        </table>
       </div>
     </div>
   </body>

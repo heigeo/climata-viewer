@@ -17,8 +17,15 @@ app.router.register_model(
     **cache_opts(Site)
 )
 
-app.router.register_model(County, **cache_opts(County))
-app.router.register_model(Basin, **cache_opts(Basin))
+app.router.register_model(
+    County,
+    queryset=County.objects.all().select_related('state'),
+    **cache_opts(County)
+)
+app.router.register_model(
+    Basin,
+    **cache_opts(Basin)
+)
 
 # No cache_opts, there will probably never be more than 100 states
 app.router.register_model(State, per_page=100)

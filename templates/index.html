@@ -5,7 +5,7 @@
     {{>head}}
   </head>
   <body{{>login_class}}>
-    <div data-role="page" class="ui-page">
+    <div data-role="page" class="ui-page" id="index">
       <div data-role="header">
         <h1>Climata Viewer</h1>
       </div>
@@ -14,11 +14,17 @@
         <h3 style="clear:both;">Options</h3>
         <ul data-role="listview" data-inset="true" class="login-shown">
           <li><a href="/webservices">Request Data</a></li>
-          <li><a href="/datarequests/">View Stored Requests</a></li>
+          <li><a href="/datarequests/">View Previous Requests</a></li>
           <li><a href="/logout">Log Out</a></li>
         </ul>
         <ul data-role="listview" data-inset="true" class="logout-shown">
-          <li><a href="/login">Log In</a></li>
+          <li><a href="/login">Log in to Request Data</a></li>
+        </ul>
+
+        <h3>Recently Requested Data</h3>
+        <svg></svg>
+        <ul data-role="listview" data-inset="true">
+          <li><a href="/datarequests/">View More Data Requests</a></li>
         </ul>
 
         <h3>Source Packages</h3>

@@ -1,5 +1,5 @@
-define(['jquery', 'wq/app', 'wq/pages', 'wq/store'],
-function($, app, pages, ds) {
+define(['jquery', 'wq/app', 'wq/pages', 'wq/store', 'wq/spinner'],
+function($, app, pages, ds, spin) {
 
 $('body').on('login', function() {
     $('body').addClass('logged-in');
@@ -12,6 +12,10 @@ $('body').on('logout', function() {
 });
 
 function setup() {
+    pages.addRoute('datarequests/new', 's', _addStateFilter);
+}
+
+function prefetch() {
     // Prefetch important data lists
     ['webservices',
      'authorities',
@@ -25,7 +29,30 @@ function setup() {
      'inverserelationships'].forEach(function(name) {
         ds.prefetch({'url': name});
     });
-    pages.addRoute('datarequests/new', 's', _addStateFilter);
+}
+
+function toggle(pid, value) {
+    $.post(
+        "/datarequests/" + pid + "/toggle.json",
+        {
+            'public': value,
+            'csrfmiddlewaretoken': ds.get('csrftoken')
+        },
+        function success(result) {
+            var msg;
+            if (result['public'])
+                msg = "Set to Public";
+            else
+                msg = "Set to Private";
+            ds.getList({'url': 'datarequests'}, function(list) {
+                var req = list.find(pid);
+                if (!req) return;
+                req['public'] = result['public'];
+                list.update([req], 'id');
+            });
+            spin.start(msg, 2, {'textonly': true});
+        }
+    );
 }
 
 // Customize inverserelationship items auto-generated for new datarequests
@@ -80,6 +107,10 @@ function _addStateFilter(match, ui, params, hash, evt, $page) {
     });
 }
 
-return {'setup': setup};
+return {
+    'setup': setup,
+    'prefetch': prefetch,
+    'toggle': toggle
+};
 
 });
