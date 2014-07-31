@@ -41,6 +41,7 @@ app.router.register_model(
 )
 app.router.register_serializer(User, UserSerializer)
 app.router.register_serializer(Parameter, AuthedModelSerializer)
+app.router.update_config(Parameter, per_page=10000)
 
 app.router.register_queryset(
     RelationshipType,

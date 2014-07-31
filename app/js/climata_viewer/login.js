@@ -100,9 +100,17 @@ function _addStateFilter(match, ui, params, hash, evt, $page) {
             return;
         $select.change(function() {
             var $opts = $page.find('option[data-state_id]'),
-                state = $select.val();
-            $opts.filter('[data-state_id="' + state + '"]').show();
-            $opts.filter('[data-state_id!="' + state + '"]').hide();
+                state = $select.val(), $enable, $disable;
+            if (!state) {
+                $enable = $opts;
+                $disable = null;
+            } else {
+                $enable = $opts.filter('[data-state_id="' + state + '"]');
+                $disable = $opts.filter('[data-state_id!="' + state + '"]');
+            }
+            $enable.show().attr('disabled', false);
+            if ($disable)
+                $disable.hide().attr('disabled', true);
         });
     });
 }

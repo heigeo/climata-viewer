@@ -14,13 +14,17 @@ function _onShow(match, ui, params, hash, evt, $page) {
 }
 
 function showData(id, elem) {
+    // Multiple #clip defs break IE
+    d3.selectAll('defs').remove();
     var svg = d3.select(elem);
     var text = svg.append('text')
         .attr('transform', 'translate(250, 140)')
         .attr('fill', '#666');
     var ndots = 0;
     var interval = setInterval(function() {
-        var dots = ".".repeat(ndots);
+        var dots = "";
+        for (var i = 0; i < ndots; i++)
+            dots += ".";
         ndots += 1;
         if (ndots > 3)
             ndots = 0;
