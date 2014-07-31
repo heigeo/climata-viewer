@@ -65,13 +65,17 @@
           {{/ids}}
           {{/result.types}}
         </table>
+        {{#result.unknown_count}}
         <button type="submit">Save Changes</button>
+        {{/result.unknown_count}}
         </form>
 
+        {{^result.unknown_count}}
         <form action="/datarequests/{{id}}/auto" method="post">
           {{>csrf}}
           <button type="submit">Continue</button>
         </form>
+        {{/result.unknown_count}}
       </div>
     </div>
   </body>

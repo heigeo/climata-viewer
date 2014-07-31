@@ -16,6 +16,16 @@
           {{#webservice}}
           <input type="hidden" name="webservice" value="{{webservice_id}}">
           <h3>{{label}} Options</h3>
+          <p>
+            Enter the filters for your data below.
+            {{^opts.county.ignored}}
+            {{^opts.basin.ignored}}
+            <br><br>
+            <b>Note</b>: County and HUC8 are both available filters for this
+            webservice - but only one at a time.
+            {{/opts.basin.ignored}}
+            {{/opts.county.ignored}}
+          </p>
           <ul>
             {{#inverserelationships}}
             <li data-role="fieldcontain">

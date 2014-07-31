@@ -7,6 +7,7 @@ function setup() {
 }
 
 function _onShow(match, ui, params, hash, evt, $page) {
+    if (match[1] == "new") return;
     var elems = $page.find('svg');
     highlight.highlightBlock($page.find('code')[0]);
     if (!elems.length)

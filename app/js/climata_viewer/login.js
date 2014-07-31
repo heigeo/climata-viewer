@@ -12,7 +12,7 @@ $('body').on('logout', function() {
 });
 
 function setup() {
-    pages.addRoute('datarequests/new', 's', _addStateFilter);
+    pages.addRoute('datarequests/new', 's', _initFilters);
 }
 
 function prefetch() {
@@ -91,16 +91,27 @@ iropts.getChoiceListFilter = function(type, context) {
     return {'authority_id': webservice.authority_id};
 };
 
-function _addStateFilter(match, ui, params, hash, evt, $page) {
+function _initFilters(match, ui, params, hash, evt, $page) {
     ds.getList({'url': 'relationshiptypes'}, function(list) {
-        var stype = list.find('state', 'from_type');
-        var sid = "d-ir-" + stype.id;
-        var $select = $page.find('select#' + sid);
-        if (!$select)
-            return;
-        $select.change(function() {
+        // Find the <select> menu or <input> corresponding to the filter name
+        function _getInput(name) {
+            var stype = list.find(name, 'from_type');
+            var sid = "d-ir-" + stype.id;
+            return $page.find('#' + sid);
+        }
+
+        var $state = _getInput('state'),
+            $basin = _getInput('basin'),
+            $county = _getInput('county');
+
+        // Auto-filter county by state
+        if ($state.length) {
+            $state.change(_filterByState);
+        }
+
+        function _filterByState() {
             var $opts = $page.find('option[data-state_id]'),
-                state = $select.val(), $enable, $disable;
+                state = $state.val(), $enable, $disable;
             if (!state) {
                 $enable = $opts;
                 $disable = null;
@@ -111,7 +122,21 @@ function _addStateFilter(match, ui, params, hash, evt, $page) {
             $enable.show().attr('disabled', false);
             if ($disable)
                 $disable.hide().attr('disabled', true);
-        });
+        }
+
+        // Only one of county or basin can be specified
+        if ($county.length && $basin.length) {
+            _exclude($county, $basin);
+            _exclude($basin, $county);
+        }
+
+        function _exclude($l1, $l2) {
+            $l1.change(function() {
+                $l2.attr('disabled', !!$l1.val());
+                if ($l2.is('select'))
+                    $l2.selectmenu('refresh');
+            });
+        }
     });
 }
 
