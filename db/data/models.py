@@ -152,6 +152,30 @@ class DataRequest(IoModel):
             date,
         )
 
+    @property
+    def as_python(self):
+        class_path = self.webservice.class_name.split(".")
+        module = ".".join(class_path[:-1])
+        class_name = class_path[-1]
+        args = ""
+        opts = self.get_io_options()
+        for opt in DEFAULT_OPTIONS:
+            if opts[opt] is not None:
+                val = opts[opt]
+                if isinstance(val, list) and len(val) == 1:
+                    val = val[0]
+                if not isinstance(val, list):
+                    val = '"%s"' % val
+                args += "\n    {key}={val},".format(key=opt, val=val)
+
+        tmpl = "from {module} import {class_name}\n\n"
+        tmpl += "data = {class_name}({args}\n)\n"
+        return tmpl.format(
+            module=module,
+            class_name=class_name,
+            args=args
+        )
+
     def get_filter_ids(self, name):
         rels = self.inverserelationships.filter(from_content_type__name=name)
         if not rels.count():

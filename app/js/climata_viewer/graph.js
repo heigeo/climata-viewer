@@ -1,5 +1,5 @@
-define(['d3', 'wq/pandas', 'wq/chart', 'wq/pages'],
-function(d3, pandas, chart, pages) {
+define(['d3', 'highlight', 'wq/pandas', 'wq/chart', 'wq/pages'],
+function(d3, highlight, pandas, chart, pages) {
 
 function setup() {
     pages.addRoute('datarequests/<slug>', 's', _onShow);
@@ -8,6 +8,7 @@ function setup() {
 
 function _onShow(match, ui, params, hash, evt, $page) {
     var elems = $page.find('svg');
+    highlight.highlightBlock($page.find('code')[0]);
     if (!elems.length)
         return;
     showData(match[1], elems[0]);

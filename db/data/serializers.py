@@ -13,6 +13,8 @@ class WebserviceSerializer(ModelSerializer):
 
 
 class DataRequestSerializer(ModelSerializer):
+    as_python = Field()
+
     def from_native(self, data, files):
         if 'user' not in data:
             data = data.dict()
