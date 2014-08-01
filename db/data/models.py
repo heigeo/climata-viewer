@@ -168,12 +168,19 @@ class DataRequest(IoModel):
                     val = '"%s"' % val
                 args += "\n    {key}={val},".format(key=opt, val=val)
 
+        if self.webservice.io_class.nested:
+            loop = "for series in data:\n    print series\n"
+            loop += "    for row in series.data:\n        print row"
+        else:
+            loop = "for row in data:\n    print row"
+
         tmpl = "from {module} import {class_name}\n\n"
-        tmpl += "data = {class_name}({args}\n)\n"
+        tmpl += "data = {class_name}({args}\n)\n\n{loop}\n"
         return tmpl.format(
             module=module,
             class_name=class_name,
-            args=args
+            args=args,
+            loop=loop
         )
 
     def get_filter_ids(self, name):

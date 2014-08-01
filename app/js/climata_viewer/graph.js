@@ -38,6 +38,7 @@ function showData(id, elem) {
         var plot = chart.timeSeries()
             .width(600)
             .height(300)
+            .xnice(d3.time.month)
             .xticks(5)
             .id(function(dataset) {
                 return dataset.parameter + '-' + dataset['site id'];
