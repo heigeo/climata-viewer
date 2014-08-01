@@ -14,6 +14,7 @@
         <progress data-url="/datarequests/{{id}}/status.json?task={{task_id}}">
           Loading...
         </progress>
+        <p class="message"></p>
         <div style="display:none" class="complete">
           {{>download}}
           <p>
@@ -23,7 +24,6 @@
           </p>
           <a data-role="button" href="/">Back to Home</a>
         </div>
-        <p class="message"></p>
         <div style="display:none" class="retry">
           <form action="/datarequests/{{id}}/auto" method="post" data-json="false">
             {{>csrf}}
@@ -31,7 +31,8 @@
             <a data-role="button" href="/">Back to Home</a>
           </form>
         </div>
-        <svg></svg>
+        <svg style="display:none"></svg>
+        <div style="display:none" class="map"></div>
       </div>
     </div>
   </body>

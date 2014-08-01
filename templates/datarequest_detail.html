@@ -30,7 +30,9 @@
         {{/completed}}
         <form action="/datarequests/{{id}}/auto" method="post" data-json="false">
           {{>csrf}}
-          <button type="submit">{{#completed}}Re-{{/completed}}Load Data</button>
+          <button type="submit"{{^completed}} data-theme="b"{{/completed}}>
+            {{#completed}}Re-{{/completed}}Load Data
+          </button>
         </form>
         </div>
 

@@ -71,7 +71,7 @@ config.transitions = {
 
 config.map = {
     'zoom': 3,
-    'center': [40, -91]
+    'center': [40, -96]
 };
 
 return config;
