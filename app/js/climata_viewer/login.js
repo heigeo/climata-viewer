@@ -31,28 +31,38 @@ function prefetch() {
     });
 }
 
-function toggle(pid, value) {
+function action(pid, action, field, value, ontrue, onfalse) {
+    var post = {
+        'csrfmiddlewaretoken': ds.get('csrftoken')
+    }
+    post[field] = value;
     $.post(
-        "/datarequests/" + pid + "/toggle.json",
-        {
-            'public': value,
-            'csrfmiddlewaretoken': ds.get('csrftoken')
-        },
+        "/datarequests/" + pid + "/" + action + ".json",
+        post,
         function success(result) {
-            var msg;
-            if (result['public'])
-                msg = "Set to Public";
-            else
-                msg = "Set to Private";
+            var msg = result[field] ? ontrue : onfalse;
             ds.getList({'url': 'datarequests'}, function(list) {
                 var req = list.find(pid);
                 if (!req) return;
-                req['public'] = result['public'];
+                req[field] = result[field];
                 list.update([req], 'id');
             });
             spin.start(msg, 2, {'textonly': true});
         }
     );
+}
+
+function toggle(pid, value) {
+    action(pid, 'toggle', 'public', value, "Set to Public", "Set to Private");
+}
+
+function del(pid) {
+    if (confirm("Are you sure you want to delete this data request?")) {
+        action(pid, 'delete', 'deleted', true, "Deleted", "Not Deleted");
+        setTimeout(function() {
+            $.mobile.changePage('/');
+        }, 3000);
+    }
 }
 
 // Customize inverserelationship items auto-generated for new datarequests
@@ -143,7 +153,8 @@ function _initFilters(match, ui, params, hash, evt, $page) {
 return {
     'setup': setup,
     'prefetch': prefetch,
-    'toggle': toggle
+    'toggle': toggle,
+    'del': del
 };
 
 });

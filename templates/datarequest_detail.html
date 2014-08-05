@@ -24,17 +24,22 @@
           {{/inverserelationships}}
         </table>
         
+        {{#is_authenticated}}
         <div class="login-shown">
         {{#completed}}
         {{>download}}
         {{/completed}}
+        {{#is_mine}}
         <form action="/datarequests/{{id}}/auto" method="post" data-json="false">
           {{>csrf}}
           <button type="submit"{{^completed}} data-theme="b"{{/completed}}>
             {{#completed}}Re-{{/completed}}Load Data
           </button>
         </form>
+        {{>del}}
+        {{/is_mine}}
         </div>
+        {{/is_authenticated}}
 
         {{#completed}}
         </div>
@@ -55,7 +60,9 @@
           <tr><th>Requested By</th><td>{{user_label}}</td></tr>
           {{#completed}}
           <tr><th>Completed On</th><td>{{completed_label}}</td></tr>
+          {{#is_mine}}
           <tr class="login-shown"><th>Public</th><td>{{>toggle}}</td></tr>
+          {{/is_mine}}
           {{/completed}}
         </table>
         <div data-role="collapsible">

@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from .models import DataRequest
 from locations.models import Site
 from wq.db.contrib.vera.models import Event, Report, Parameter
+from django.utils.timezone import now
 
 
 class DataRequestViewSet(IoViewSet):
@@ -12,11 +13,24 @@ class DataRequestViewSet(IoViewSet):
     def toggle(self, request, *args, **kwargs):
         self.retrieve(request, *args, **kwargs)
         obj = self.get_instance()
-        obj.public = True if request.POST.get("public", None) else False
-        obj.save()
+        if request.user == obj.user:
+            obj.public = True if request.POST.get("public", None) else False
+            obj.save()
         return Response({
             'public': obj.public
         })
+
+    @action()
+    def delete(self, request, *args, **kwargs):
+        self.retrieve(request, *args, **kwargs)
+        obj = self.get_instance()
+        if request.user == obj.user:
+            obj.deleted = now()
+            obj.save()
+            deleted = True
+        else:
+            deleted = False
+        return Response({'deleted': deleted})
 
 
 class ExportView(ChartView):
@@ -24,12 +38,12 @@ class ExportView(ChartView):
         # Filter by datarequest: return the latest data for all events that
         # were affected by the datarequest.  (This is subtly different then
         # returning only the actual data imported by the request.)
+        from .rest import user_filter
+        reqs = user_filter(DataRequest.objects, self.request)
         if extra[0] == "latest":
-            dr = DataRequest.objects.filter(
-                public=True
-            ).order_by('-completed')[0]
+            dr = reqs.filter(public=True).order_by('-completed')[0]
         else:
-            dr = DataRequest.objects.get(pk=extra[0])
+            dr = reqs.get(pk=extra[0])
 
         events = Event.objects.filter(
             report__in=Report.objects.filter_by_related(dr)

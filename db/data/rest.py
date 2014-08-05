@@ -15,9 +15,9 @@ Parameter = swapper.load_model('vera', 'Parameter')
 
 
 def user_filter(qs, request):
-    public_data = qs.filter(public=True)
+    public_data = qs.filter(public=True, deleted__isnull=True)
     if request.user and request.user.is_authenticated():
-        user_data = qs.filter(user=request.user)
+        user_data = qs.filter(user=request.user, deleted__isnull=True)
     else:
         user_data = qs.none()
 

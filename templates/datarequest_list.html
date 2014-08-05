@@ -12,14 +12,20 @@
         {{#is_authenticated}}
         <p class="login-shown">Data Requests for {{user.username}}</p>
         {{/is_authenticated}}
-        <ul data-role="listview">
+        <ul data-role="listview" data-filter="true" data-count-theme="b">
           {{#list}}
+          {{^deleted}}
           <li>
             <a href="/datarequests/{{id}}">
               <p class="ui-li-aside">{{requested_label}}</p>
-              <h3>{{label}}</h3>
+              {{#is_authenticated}}{{#public}}
+              <span class="ui-li-count">Public</span>
+              {{/public}}{{/is_authenticated}}
+              <h3>{{webservice_label}}</h3>
+              <p>{{label}}</p>
             </a>
           </li>
+          {{/deleted}}
           {{/list}}
           {{^list}}
           <li data-icon="add" data-iconpos="right" class="login-shown">

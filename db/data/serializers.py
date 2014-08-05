@@ -1,5 +1,7 @@
 from rest_framework.fields import Field, SerializerMethodField
-from rest_framework.serializers import ValidationError, Field
+from rest_framework.serializers import (
+    ValidationError, Field, SerializerMethodField
+)
 from wq.db.rest.serializers import ModelSerializer
 from wq.db.rest.auth.serializers import UserSerializer
 from wq.db.patterns.relate.serializers import InverseRelationshipSerializer
@@ -14,6 +16,7 @@ class WebserviceSerializer(ModelSerializer):
 
 class DataRequestSerializer(ModelSerializer):
     as_python = Field()
+    is_mine = SerializerMethodField('get_is_mine')
 
     def from_native(self, data, files):
         if 'user' not in data:
@@ -39,6 +42,12 @@ class DataRequestSerializer(ModelSerializer):
 
     def validate_end_date(self, attrs, source):
         return self.validate_option(attrs, source)
+
+    def get_is_mine(self, instance):
+        if 'request' in self.context:
+            if self.context['request'].user == instance.user:
+                return True
+        return False
 
     class Meta:
         exclude = ("relationships",)

@@ -73,6 +73,7 @@ class DataRequest(IoModel):
     webservice = models.ForeignKey(Webservice)
     requested = models.DateTimeField(auto_now_add=True)
     completed = models.DateTimeField(null=True, blank=True)
+    deleted = models.DateTimeField(null=True, blank=True)
     public = models.BooleanField(default=False)
 
     start_date = models.DateField(null=True, blank=True)
@@ -126,14 +127,21 @@ class DataRequest(IoModel):
     def __unicode__(self):
         if not self.webservice_id:
             return None
-        locs = (
-            (self.state or [])
-            + (self.county or [])
-            + (self.basin or [])
-            + (self.station or [])
-        )
-        if locs:
-            locs = " for %s" % ", ".join(locs)
+
+        param_filters = self.get_filter_labels('parameter')
+        if param_filters:
+            params = ", ".join(param_filters)
+        else:
+            params = "All Data"
+
+        loc_filters = []
+        for name in ('state', 'county', 'basin', 'station'):
+            if getattr(self, name):
+                name = 'site' if name == 'station' else name
+                loc_filters += self.get_filter_labels(name)
+
+        if loc_filters:
+            locs = " for %s" % ", ".join(loc_filters)
         else:
             locs = ""
 
@@ -146,11 +154,7 @@ class DataRequest(IoModel):
         else:
             date = ""
 
-        return "%s data %s%s" % (
-            self.webservice,
-            locs,
-            date,
-        )
+        return params + locs + date
 
     @property
     def as_python(self):
@@ -183,11 +187,17 @@ class DataRequest(IoModel):
             loop=loop
         )
 
-    def get_filter_ids(self, name):
+    def get_filter_rels(self, name, fn):
         rels = self.inverserelationships.filter(from_content_type__name=name)
         if not rels.count():
             return None
-        return [self.get_object_id(rel.right) for rel in rels]
+        return [fn(rel.right) for rel in rels]
+
+    def get_filter_ids(self, name):
+        return self.get_filter_rels(name, self.get_object_id)
+
+    def get_filter_labels(self, name):
+        return self.get_filter_rels(name, unicode)
 
     @property
     def state(self):
