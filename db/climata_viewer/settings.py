@@ -96,6 +96,7 @@ AUTHENTICATION_BACKENDS = (
     'social.backends.facebook.FacebookOAuth2',
     'social.backends.twitter.TwitterOAuth',
     'social.backends.github.GithubOAuth2',
+    'social.backends.linkedin.LinkedinOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 LOGIN_REDIRECT_URL = "/"
