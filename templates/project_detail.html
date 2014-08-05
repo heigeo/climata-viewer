@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {{>head}}
+  </head>
+  <body{{>login_class}}>
+    <div data-role="page">
+      <div data-role="header">
+        <a href="/" data-icon="home" data-iconpos="notext">Home</a>
+        <h3>{{label}}</h3>
+      </div>
+      <div data-role="content">
+        <ul data-role="listview" data-inset="true">
+          <li data-role="list-divider" data-theme="c">Included Data</li>
+          {{#relationships}}
+          <li><a href="/{{item_url}}">
+            <h3>{{item_label}}</h3>
+          </a></li>
+          {{/relationships}}
+
+          {{#is_mine}}
+          <li data-icon="plus" class="login-shown" data-theme="b">
+            <a href="/webservices" data-theme="b" onclick="require('climata_viewer/login').setProject('{{id}}');">
+              Add Data
+            </a>
+          </li>
+          {{/is_mine}}
+        </ul>
+        {{#has_data}}
+        <hr>
+        <svg></svg>
+        <hr>
+        <div id="project-{{id}}-map" class="map"></div>
+        {{/has_data}}
+        <hr>
+        <table>
+          <tr><th>Created On</th><td>{{created_label}}</td></tr>
+          <tr><th>Created By</th><td>{{user_label}}</td></tr>
+          {{#is_mine}}
+          <tr class="login-shown"><th>Public</th><td>{{>toggle}}</td></tr>
+          {{/is_mine}}
+        </table>
+      </div>
+    </div>
+  </body>
+  </html>

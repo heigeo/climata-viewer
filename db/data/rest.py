@@ -1,12 +1,14 @@
-from .models import Webservice, DataRequest
+from .models import Webservice, DataRequest, Project
 from .serializers import (
     WebserviceSerializer, DataRequestSerializer, UserSerializer,
-    AuthedModelSerializer, InverseRelationshipSerializer
+    AuthedModelSerializer, InverseRelationshipSerializer,
+    ProjectSerializer
 )
-from .views import DataRequestViewSet
+from .views import ToggleViewSet, DataRequestViewSet
 from wq.db.patterns.models import (
     Relationship, InverseRelationship, RelationshipType
 )
+from django.db.models import Q
 from wq.db.rest import app
 from django.contrib.auth.models import User
 import swapper
@@ -15,13 +17,10 @@ Parameter = swapper.load_model('vera', 'Parameter')
 
 
 def user_filter(qs, request):
-    public_data = qs.filter(public=True, deleted__isnull=True)
+    query = Q(public=True)
     if request.user and request.user.is_authenticated():
-        user_data = qs.filter(user=request.user, deleted__isnull=True)
-    else:
-        user_data = qs.none()
-
-    return public_data | user_data
+        query = query | Q(user=request.user)
+    return qs.filter(query).exclude(deleted__isnull=False)
 
 
 def rel_filter(qs, request):
@@ -40,18 +39,31 @@ app.router.register_model(
     reversed=True,
     map=True,
 )
+app.router.register_model(
+    Project,
+    viewset=ToggleViewSet,
+    filter=user_filter,
+    serializer=ProjectSerializer,
+    reversed=True,
+    map=True,
+)
 app.router.register_serializer(User, UserSerializer)
 app.router.register_serializer(Parameter, AuthedModelSerializer)
 app.router.update_config(Parameter, per_page=10000)
 
 app.router.register_queryset(
     RelationshipType,
-    RelationshipType.objects.filter(name="Filter For")
+    RelationshipType.objects.filter(to_type__model="datarequest")
 )
-app.router.register_queryset(Relationship, Relationship.objects.none())
+app.router.register_queryset(
+    Relationship,
+    Relationship.objects.filter(from_content_type__model="project"),
+)
+app.router.register_filter(Relationship, rel_filter)
+app.router.update_config(Relationship, per_page=10000)
 app.router.register_queryset(
     InverseRelationship,
-    InverseRelationship.objects.filter(type__name="Filter For"),
+    InverseRelationship.objects.filter(to_content_type__model="datarequest"),
 )
 app.router.register_filter(InverseRelationship, rel_filter)
 app.router.update_config(InverseRelationship, per_page=10000)

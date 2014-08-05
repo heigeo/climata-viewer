@@ -1,5 +1,5 @@
 <select name="public" data-role="slider"
-    onchange="require('climata_viewer/login').toggle({{id}}, this.value);">
+    onchange="require('climata_viewer/login').toggle('{{page}}', '{{id}}', this.value);">
   <option value="">No</option>
   <option value="1"{{#public}} selected{{/public}}>Yes</option>
 </select>

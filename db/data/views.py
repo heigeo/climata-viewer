@@ -1,3 +1,4 @@
+from wq.db.rest.views import ModelViewSet
 from wq.db.contrib.dbio.views import IoViewSet
 from wq.db.contrib.chart.views import ChartView
 from rest_framework.decorators import action
@@ -8,11 +9,11 @@ from wq.db.contrib.vera.models import Event, Report, Parameter
 from django.utils.timezone import now
 
 
-class DataRequestViewSet(IoViewSet):
+class ToggleViewSet(ModelViewSet):
     @action()
     def toggle(self, request, *args, **kwargs):
         self.retrieve(request, *args, **kwargs)
-        obj = self.get_instance()
+        obj = self.object
         if request.user == obj.user:
             obj.public = True if request.POST.get("public", None) else False
             obj.save()
@@ -23,7 +24,7 @@ class DataRequestViewSet(IoViewSet):
     @action()
     def delete(self, request, *args, **kwargs):
         self.retrieve(request, *args, **kwargs)
-        obj = self.get_instance()
+        obj = self.object
         if request.user == obj.user:
             obj.deleted = now()
             obj.save()
@@ -31,6 +32,27 @@ class DataRequestViewSet(IoViewSet):
         else:
             deleted = False
         return Response({'deleted': deleted})
+
+
+class DataRequestViewSet(IoViewSet, ToggleViewSet):
+    @action()
+    def auto(self, request, *args, **kwargs):
+        response = super(DataRequestViewSet, self).auto(
+            request, *args, **kwargs
+        )
+        links = [{
+            'url': '/',
+            'label': "Back to Home"
+        }]
+        obj = self.object
+        project = obj.project
+        if project:
+            links.append({
+                'url': '/projects/%s' % obj.get_object_id(project),
+                'label': "Back to Project: %s" % project,
+            })
+        response.data['links'] = links
+        return response
 
 
 class ExportView(ChartView):

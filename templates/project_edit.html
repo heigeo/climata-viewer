@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Create Project</title>
+    {{>head}}
+  </head>
+  <body{{>login_class}}>
+    <div data-role="page">
+      <div data-role="header">
+        <a href="/" data-icon="home" data-iconpos="notext">Home</a>
+        <h3>Create Project</h3>
+      </div>
+      <div data-role="content">
+        <form action="/projects/" method="post" data-ajax="false">
+          {{>csrf}}
+          <ul data-role="listview">
+            {{>identifiers}}
+            <li data-role="fieldcontain">
+              <button type="submit">Save</button>
+              <p class="error datarequest-errors"></p>
+            </li>
+          </ul>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

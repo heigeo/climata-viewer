@@ -35,10 +35,7 @@
               <select id="d-ir-{{type_id}}"
                 name="inverserelationship-{{type_id}}-item_id"
                 {{#required}}required{{/required}}>
-                <option value="">
-                   {{#required}}Pick an option...{{/required}}
-                   {{^required}}Any / All{{/required}}
-                </option>
+                <option value="">{{select_prompt}}</option>
               {{/use_select}}
 
               {{^use_select}}
@@ -63,6 +60,7 @@
               {{^use_remote}}
               {{#item_choices}}
                 <option value="{{id}}"
+                    {{#current}}selected{{/current}}
                     {{#state_id}}data-state_id={{state_id}}{{/state_id}}>
                   {{label}}
                 </option>

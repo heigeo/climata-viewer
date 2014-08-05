@@ -7,9 +7,10 @@
     <div data-role="page" data-url="/datarequests/{{id}}/ids">
       <div data-role="header">
         <a href="/" data-icon="home" data-iconpos="notext">Home</a>
-        <h3>{{label}}</h3>
+        <h3>{{webservice_label}}</h3>
       </div>
       <div data-role="content">
+        <p>{{label}}</p>
         <form action="/datarequests/{{id}}/updateids" method="post" data-json="false">
         {{>csrf}}
         {{#result.unknown_count}}

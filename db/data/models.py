@@ -223,8 +223,30 @@ class DataRequest(IoModel):
     def parameter(self):
         return self.get_filter_ids('parameter')
 
+    @property
+    def project(self):
+        projects = self.get_filter_rels('project', lambda d: d)
+        if projects:
+            return projects[0]
+        return None
+
     class Meta:
         ordering = ("-requested",)
+
+
+class Project(models.IdentifiedRelatedModel):
+    user = models.ForeignKey('auth.User', null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    deleted = models.DateTimeField(null=True, blank=True)
+    public = models.BooleanField(default=False)
+
+    @property
+    def requests(self):
+        return [rel.right for rel in self.relationships.all()]
+
+    @property
+    def has_data(self):
+        return any(req.completed for req in self.requests)
 
 
 @receiver(import_complete)

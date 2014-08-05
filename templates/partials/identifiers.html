@@ -1,0 +1,20 @@
+{{^id}}
+<li data-role="fieldcontain">
+  <label for="{{page}}-ident-new">
+    Name
+  </label>
+  <input id="{{page}}-ident-new" name="identifier--name"
+    placeholder="Enter a Name">
+</li>
+{{/id}}
+{{#identifiers}}
+<li data-role="fieldcontain">
+  <label for="{{page}}-ident-{{authority_id}}-{{id}}">
+    {{authority_label}}
+    {{^authority_label}}Name{{/authority_label}}
+  </label>
+  <input id="{{page}}-ident-{{authority_id}}-{{id}}"
+    name="identifier-{{authority_id}}-name"
+    value="{{name}}" placeholder="Enter Name">
+</li>
+{{/identifiers}}

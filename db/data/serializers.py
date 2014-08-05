@@ -14,8 +14,7 @@ class WebserviceSerializer(ModelSerializer):
     extra_opts = Field("extra_options")
 
 
-class DataRequestSerializer(ModelSerializer):
-    as_python = Field()
+class MySerializer(ModelSerializer):
     is_mine = SerializerMethodField('get_is_mine')
 
     def from_native(self, data, files):
@@ -23,7 +22,17 @@ class DataRequestSerializer(ModelSerializer):
             data = data.dict()
             user = self.context['request'].user
             data['user'] = user.pk
-        return super(DataRequestSerializer, self).from_native(data, files)
+        return super(MySerializer, self).from_native(data, files)
+
+    def get_is_mine(self, instance):
+        if 'request' in self.context:
+            if self.context['request'].user == instance.user:
+                return True
+        return False
+
+
+class DataRequestSerializer(MySerializer):
+    as_python = Field()
 
     def validate_option(self, attrs, field):
         if not attrs.get('webservice', None):
@@ -43,14 +52,12 @@ class DataRequestSerializer(ModelSerializer):
     def validate_end_date(self, attrs, source):
         return self.validate_option(attrs, source)
 
-    def get_is_mine(self, instance):
-        if 'request' in self.context:
-            if self.context['request'].user == instance.user:
-                return True
-        return False
-
     class Meta:
         exclude = ("relationships",)
+
+
+class ProjectSerializer(MySerializer):
+    has_data = Field()
 
 
 class UserSerializer(UserSerializer):

@@ -18,12 +18,28 @@ function onComplete($progress, data) {
             graph.showData(id, elems[0]);
         }
         ds.getList({'url': 'datarequests'}, function(list) {
+            // Mark local copy of request as completed
             var req = list.find(id);
-            if (req) {
-                req.completed = true;
-                req.completed_label = 'just now';
-                list.update([req], 'id');
-            }
+            if (!req)
+                return;
+            req.completed = true;
+            req.completed_label = 'just now';
+            list.update([req], 'id');
+
+            // Mark any related projects as having data
+            ds.getList({'url': 'inverserelationships'}, function(rels) {
+                var prels = rels.filter(
+                    {'datarequest_id': req.id, 'item_page': 'project'}
+                );
+                prels.forEach(function(prel) {
+                    ds.getList({'url': 'projects'}, function(plist) {
+                        var project = plist.find(prel.item_id);
+                        if (!project) return;
+                        project.has_data = true;
+                        list.update([project], 'id');
+                    });
+                });
+            });
         });
     }
 }

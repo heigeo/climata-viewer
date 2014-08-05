@@ -7,7 +7,7 @@
     <div data-role="page">
       <div data-role="header">
         <a href="/" data-icon="home" data-iconpos="notext">Home</a>
-        <h3>{{label}}</h3>
+        <h3>{{webservice_label}}</h3>
       </div>
       <div data-role="content">
         <h3>Loading {{label}}...</h3>
@@ -22,13 +22,14 @@
             <br>
             {{>toggle}}
           </p>
+          {{>links}}
           <a data-role="button" href="/">Back to Home</a>
         </div>
         <div style="display:none" class="retry">
           <form action="/datarequests/{{id}}/auto" method="post" data-json="false">
             {{>csrf}}
             <button type="submit">Try Again</button>
-            <a data-role="button" href="/">Back to Home</a>
+            {{>links}}
           </form>
         </div>
         <svg style="display:none"></svg>

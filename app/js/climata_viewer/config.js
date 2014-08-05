@@ -44,11 +44,24 @@ config.defaults = {
         if (!info)
             return false;
         var type_id = info.reltype.from_type;
+        if (type_id == 'project')
+            return false;
         if (type_id == 'site')
             type_id = 'station';
         if (type_id)
             return info.webservice.opts[type_id].required;
         return false;
+    },
+    'select_prompt': function() {
+        var info = _getContextInfo.call(this);
+        if (!info)
+            return "Any / All";
+        if (config.defaults.required.call(this))
+            return "Pick an option...";
+        var type_id = info.reltype.from_type;
+        if (type_id == 'project')
+            return "None";
+        return "Any / All";
     },
     'start_date': defaultYear + '-01-01',
     'end_date': defaultYear + '-12-31'
