@@ -13,18 +13,19 @@
         ],
         "paths": {
             "climata_viewer": "../climata_viewer",
+            "data": "../data",
             "db": "empty:"
         }
     },
     "setversion": {
        "filename": "../version.txt",
-       "jsout": "js/climata_viewer/version.js"
+       "jsout": "js/data/version.js"
     },
     "collectjson": [
         {
             "paths": ["../templates"],
             "type": "html",
-            "output": "js/climata_viewer/templates.js",
+            "output": "js/data/templates.js",
             "json": {
                 "indent": 4
             },

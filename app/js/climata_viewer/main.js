@@ -1,6 +1,6 @@
 define(['jquery', 'wq/app', 'wq/autocomplete',
         './login', './process', './graph', './maps',
-        './config', './templates'],
+        './config', 'data/templates'],
 function($, app, auto, login, process, graph, maps, config, templates) {
 
 // Initialize wq/app and connect to auth events

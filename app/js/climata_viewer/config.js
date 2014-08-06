@@ -1,5 +1,5 @@
-define(["wq/store", "wq/router", "wq/pages", "db/config",
-        "./version", "./climata_version"],
+define(["wq/store", "wq/router", "wq/pages", "data/config",
+        "data/version", "data/climata_version"],
 function(ds, router, pages, config, version, climata_version) {
 
 var defaultYear = new Date().getFullYear() - 1;

@@ -3,11 +3,13 @@
 # Exit on error
 set -e
 
-# Save climata version to AMD module
+# Save climata version and REST config to AMD modules
 cd db
 CLIMATA_VERSION=`python -c "from climata.version import VERSION; print VERSION"`;
+CONFIG=`./manage.py db_config`;
 cd ../
-echo "define(function(){return '$CLIMATA_VERSION';});" > app/js/climata_viewer/climata_version.js
+echo "define(function(){return '$CLIMATA_VERSION';});" > app/js/data/climata_version.js
+echo "define($CONFIG);" > app/js/data/config.js
 
 # Build javascript with wq.app
 cd app;
