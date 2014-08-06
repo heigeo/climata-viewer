@@ -11,33 +11,37 @@ function onComplete($progress, data) {
     $progress.siblings('.message').html("Data successfully imported.");
     $progress.siblings('.complete').show();
     var id =_getId($progress);
-    var elems = $progress.siblings('svg');
-    if (id) {
-        if (elems.length) {
-            elems.show();
-            graph.showData(id, elems[0]);
-        }
-        ds.getList({'url': 'datarequests'}, function(list) {
-            // Mark local copy of request as completed
-            var req = list.find(id);
-            if (!req)
-                return;
-            req.completed = true;
-            req.completed_label = 'just now';
-            list.update([req], 'id');
+    var $elems = $progress.siblings('svg');
+    if (!id)
+        return;
 
-            // Mark any related projects as having data
-            ds.getList({'url': 'inverserelationships'}, function(rels) {
-                var prels = rels.filter(
-                    {'datarequest_id': req.id, 'item_page': 'project'}
-                );
-                prels.forEach(function(prel) {
-                    ds.getList({'url': 'projects'}, function(plist) {
-                        var project = plist.find(prel.item_id);
-                        if (!project) return;
-                        project.has_data = true;
-                        list.update([project], 'id');
-                    });
+    ds.getList({'url': 'datarequests'}, _updateReqs);
+
+    if ($elems.length) {
+        $elems.show();
+        graph.showData([id], $elems[0]);
+    }
+
+    function _updateReqs(list) {
+        // Mark local copy of request as completed
+        var req = list.find(id);
+        if (!req)
+            return;
+        req.completed = true;
+        req.completed_label = 'just now';
+        list.update([req], 'id');
+
+        // Mark any related projects as having data
+        ds.getList({'url': 'inverserelationships'}, function(rels) {
+            var prels = rels.filter(
+                {'datarequest_id': req.id, 'item_page': 'project'}
+            );
+            prels.forEach(function(prel) {
+                ds.getList({'url': 'projects'}, function(plist) {
+                    var project = plist.find(prel.item_id);
+                    if (!project) return;
+                    project.has_data = true;
+                    list.update([project], 'id');
                 });
             });
         });

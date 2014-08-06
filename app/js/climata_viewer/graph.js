@@ -1,21 +1,37 @@
-define(['d3', 'highlight', 'wq/pandas', 'wq/chart', 'wq/pages'],
-function(d3, highlight, pandas, chart, pages) {
+define(['d3', 'highlight', 'wq/pandas', 'wq/chart', 'wq/pages', './layers'],
+function(d3, highlight, pandas, chart, pages, layers) {
 
 function setup() {
-    pages.addRoute('.atarequests/<slug>', 's', _onShow);
+    pages.addRoute('<slug>/<slug>', 's', _onShow);
     pages.addRoute('', 's', showLatest);
 }
 
 function _onShow(match, ui, params, hash, evt, $page) {
-    if (match[1] == "new") return;
-    var elems = $page.find('svg');
-    highlight.highlightBlock($page.find('code')[0]);
-    if (!elems.length)
+    var baseurl = match[1], $elems, ids, labels;
+
+    if (match[2] == "new")
         return;
-    showData(match[1], elems[0]);
+    if (baseurl != "projects" && baseurl != "datarequests")
+        return;
+
+    if (baseurl == "datarequests") {
+        highlight.highlightBlock($page.find('code')[0]);
+        ids = [match[2]];
+    } else {
+        ids = [];
+        labels = {};
+        layers.getLayers($page).forEach(function(d){
+            ids.push(d.id);
+            labels[d.id] = d.label;
+        });
+    }
+
+    $elems = $page.find('svg');
+    if (ids.length && $elems.length)
+        showData(ids, $elems[0], labels);
 }
 
-function showData(id, elem) {
+function showData(ids, elem, labels) {
     // Multiple #clip defs break IE
     d3.selectAll('defs').remove();
     var svg = d3.select(elem);
@@ -32,29 +48,74 @@ function showData(id, elem) {
             ndots = 0;
         text.text("Loading Chart" + dots);
     }, 500);
-    pandas.get('/data/' + id + '/export.csv', function(data) {
-        text.remove();
-        clearInterval(interval);
-        var plot = chart.timeSeries()
-            .width(600)
-            .height(300)
-            .xnice(d3.time.month)
-            .xticks(5)
-            .id(function(dataset) {
-                return dataset.parameter + '-' + dataset['site id'];
-            })
-            .label(function(dataset) {
-                return (
-                    dataset.parameter +
-                    ' at ' +
-                    dataset['site id'] +
-                    ' (' +
-                    dataset['site name'] +
-                    ')'
-                );
-            });
-        svg.datum(data).call(plot);
+
+    var plot = chart.timeSeries()
+        .width(600)
+        .height(300)
+        .xnice(d3.time.month)
+        .xticks(5)
+        .id(function(dataset) {
+            return (
+                dataset.group_id + '-' +
+                dataset.parameter + '-' +
+                dataset['site id']
+            );
+        })
+        .label(function(dataset) {
+            return (
+                dataset.parameter +
+                ' at ' +
+                dataset['site id'] +
+                ' (' +
+                dataset['site name'] +
+                ')'
+            );
+        });
+
+    if (labels) {
+        plot.legendItems(function() {
+            return ids;
+        });
+        plot.legendItemId(function(id) {
+            return id;
+        });
+        plot.legendItemLabel(function(id) {
+            return labels[id];
+        });
+        plot.cscale(_makeScale());
+    }
+    window.plott=plot;
+
+    ids.forEach(function(id) {
+        pandas.get('/data/' + id + '/export.csv', _plot(id));
     });
+
+    var data = [];
+    function _plot(id) {
+        return function(newdata) {
+            if (interval) {
+                text.remove();
+                clearInterval(interval);
+            }
+            newdata.forEach(function(d) {
+                d.group_id = id;
+            });
+            data = data.concat(newdata);
+            svg.datum(data).call(plot);
+        };
+    }
+
+    function _makeScale() {
+        var _scale = d3.scale.ordinal()
+            .domain(ids)
+            .range(layers.hexColors);
+
+        function scale(val) {
+            var group = val.split('-')[0];
+            return _scale(group);
+        }
+        return scale;
+    }
 }
 
 function showLatest(match, ui, params, hash, evt, $page) {
@@ -63,7 +124,7 @@ function showLatest(match, ui, params, hash, evt, $page) {
         svg = $page.find('svg')[0];
     else
         svg = d3.select('div.ui-page#index svg').node();
-    showData('latest', svg);
+    showData(['latest'], svg);
 }
 
 return {

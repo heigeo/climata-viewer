@@ -10,12 +10,16 @@
         <h3>{{label}}</h3>
       </div>
       <div data-role="content">
-        <ul data-role="listview" data-inset="true">
+        <ul data-role="listview" data-inset="true" class="layer-list">
           <li data-role="list-divider" data-theme="c">Included Data</li>
+          {{reset_color}}
           {{#relationships}}
-          <li><a href="/{{item_url}}">
-            <h3>{{item_label}}</h3>
-          </a></li>
+          <li data-item_id="{{item_id}}" data-item_label="{{item_label}}">
+            <a href="/{{item_url}}">
+              <img src="/images/{{get_color}}.png" class="ui-li-icon">
+              <h3>{{item_label}}</h3>
+            </a>
+          </li>
           {{/relationships}}
 
           {{#is_mine}}

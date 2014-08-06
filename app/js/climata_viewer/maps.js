@@ -1,6 +1,13 @@
-define(['leaflet', 'wq/map', './config'],
-function(L, map, config) {
+define(['leaflet', 'wq/map', './config', './layers'],
+function(L, map, config, layers) {
 L.Icon.Default.imagePath = "/css/lib/images";
+
+layers.colors.forEach(function(color) {
+    map.createIcon(color, {
+        'iconUrl': '/images/' + color + '.png',
+        'shadowUrl': L.Icon.Default.imagePath + '/marker-shadow.png'
+    });
+});
 
 function setup() {
     map.init(config.map);
@@ -11,16 +18,25 @@ function setup() {
 
 var _maps = {
     'datarequest': function(itemid) {
-        return [{
-            'url': 'datarequests/' + itemid + '/sites',
-            'name': 'Sites',
-            'oneach': map.renderPopup('site')
-        }];
+        return [_siteLayer({
+            'id': itemid,
+            'label': 'Sites',
+            'color': 'blue'
+        })];
     },
-    'project': function(itemid) {
-        return []; // FIXME
+    'project': function() {
+        return layers.getLayers().map(_siteLayer);
     }
 };
+
+function _siteLayer(item) {
+    return {
+        'url': 'datarequests/' + item.id + '/sites',
+        'name': item.label,
+        'oneach': map.renderPopup('site'),
+        'icon': item.color
+    };
+}
 
 return {
     'setup': setup
