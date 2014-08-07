@@ -1,14 +1,27 @@
 climata-viewer
 ==============
 
-Interactive database and analysis tools for the [climata] library.
+Interactive database and analysis tools for the [climata] library.  Powered by [wq].
 
 Live Demo: <http://climata.houstoneng.net>
 
 ## Installation
 
+Follow the instructions on <http://wq.io/docs/setup>, but replace
+
 ```bash
-pip install wq
-pip install climata
-git clone
+wq-start $PROJECTNAME
 ```
+
+with
+
+```bash
+git clone https://github.com/heigeo/climata-viewer.git $PROJECTNAME
+```
+
+## Configuration
+
+Log into the Django administrative interface and create a new Webservice pointing to one of the climata IO classes.
+
+[climata]: https://github.com/heigeo/climata
+[wq]: http://wq.io/
