@@ -1,7 +1,7 @@
 climata-viewer
 ==============
 
-Interactive database and analysis tools for the [climata] library.  Powered by [wq].
+Interactive database and analysis tools for the [climata] library.  Powered by [wq] and [Django REST Pandas].
 
 Live Demo: <http://climata.houstoneng.net>
 
@@ -25,3 +25,4 @@ Log into the Django administrative interface and create a new Webservice pointin
 
 [climata]: https://github.com/heigeo/climata
 [wq]: http://wq.io/
+[Django REST Pandas]: https://github.com/wq/django-rest-pandas
