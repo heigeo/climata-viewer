@@ -34,6 +34,7 @@ app.router.register_model(
 app.router.register_model(
     DataRequest,
     viewset=DataRequestViewSet,
+    queryset=DataRequest.objects.select_related('webservice'),
     filter=user_filter,
     serializer=DataRequestSerializer,
     reversed=True,

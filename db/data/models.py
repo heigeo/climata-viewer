@@ -124,9 +124,12 @@ class DataRequest(IoModel):
             return model.objects.none()
         return model.objects.all()
 
+    _labels = {}
     def __unicode__(self):
         if not self.webservice_id:
             return None
+        if self.pk in DataRequest._labels:
+            return DataRequest._labels[self.pk]
 
         param_filters = self.get_filter_labels('parameter')
         if param_filters:
@@ -154,10 +157,16 @@ class DataRequest(IoModel):
         else:
             date = ""
 
-        return params + locs + date
+        label = params + locs + date
+        DataRequest._labels[self.pk] = label
+        return label
+
+    _python = {}
 
     @property
     def as_python(self):
+        if self.pk in DataRequest._python:
+            return DataRequest._python[self.pk]
         class_path = self.webservice.class_name.split(".")
         module = ".".join(class_path[:-1])
         class_name = class_path[-1]
@@ -180,24 +189,30 @@ class DataRequest(IoModel):
 
         tmpl = "from {module} import {class_name}\n\n"
         tmpl += "data = {class_name}({args}\n)\n\n{loop}\n"
-        return tmpl.format(
+        python = tmpl.format(
             module=module,
             class_name=class_name,
             args=args,
             loop=loop
         )
+        DataRequest._python[self.pk] = python
+        return python
 
-    def get_filter_rels(self, name, fn):
+    def get_filter_rels(self, name):
         rels = self.inverserelationships.filter(from_content_type__name=name)
         if not rels.count():
             return None
-        return [fn(rel.right) for rel in rels]
+        return rels
 
     def get_filter_ids(self, name):
-        return self.get_filter_rels(name, self.get_object_id)
+        rels = self.get_filter_rels(name)
+        if rels:
+            return [self.get_object_id(rel.right) for rel in rels]
 
     def get_filter_labels(self, name):
-        return self.get_filter_rels(name, unicode)
+        rels = self.get_filter_rels(name)
+        if rels:
+            return [rel.right_dict['item_label'] for rel in rels]
 
     @property
     def state(self):
@@ -225,9 +240,9 @@ class DataRequest(IoModel):
 
     @property
     def project(self):
-        projects = self.get_filter_rels('project', lambda d: d)
+        projects = self.get_filter_rels('project')
         if projects:
-            return projects[0]
+            return projects[0].right
         return None
 
     class Meta:
@@ -242,7 +257,7 @@ class Project(models.IdentifiedRelatedModel):
 
     @property
     def requests(self):
-        return [rel.right for rel in self.relationships.all()]
+        return (rel.right for rel in self.relationships.all())
 
     @property
     def has_data(self):

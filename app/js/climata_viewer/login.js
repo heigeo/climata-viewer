@@ -107,8 +107,11 @@ function setProject(projectid) {
 // Need to ensure relationships is updated after datarequest save
 var _postsave = app.postsave;
 app.postsave = function(item, result, conf) {
-    if (conf.name == 'datarequest')
-        ds.prefetch({'url': 'relationships', 'page': 1});
+    if (conf.name == 'datarequest') {
+        ds.getList({'url': 'relationships'}, function(list) {
+            list.prefetch();
+        });
+    }
     _postsave(item, result, conf);
 };
 
