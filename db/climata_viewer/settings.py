@@ -88,6 +88,8 @@ from wq.db.rest.settings import (
 )
 
 WQ_SITE_MODEL = "locations.Site"
+WQ_EVENT_MODEL = "data.Event"
+WQ_EVENTRESULT_MODEL = "data.EventResult"
 WQ_DEFAULT_REPORT_STATUS = 1
 
 # wq: Social auth (see http://psa.matiasaguirre.net/docs/backends/)

@@ -5,7 +5,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import DataRequest
 from locations.models import Site
-from wq.db.contrib.vera.models import Event, Report, Parameter
+from .models import Event
+from wq.db.contrib.vera.models import Report, Parameter
 from django.utils.timezone import now
 
 
@@ -82,20 +83,24 @@ class ExportView(ChartView):
         """
         Add site metadata to columns to make output more usable.
         """
+        # Unstack event.type as a column instead of a row field
+        df = df.unstack()
+
         columns = []
         for col in df.columns:
-            val, unit, pid, sid = col
+            val, unit, pid, sid, etype = col
             param = Parameter.objects.get_by_identifier(pid)
             site = Site.objects.get_by_identifier(sid)
             col = (
                 val, unit, param.name,
                 sid, site.name or '-',
-                site.latitude or '-', site.longitude or '-'
+                site.latitude or '-', site.longitude or '-',
+                etype or "-",
             )
             columns.append(col)
         df.columns = df.columns.from_tuples(columns)
         df.columns.names = (
             "", "units", "parameter",
-            "site id", "site name", "latitude", "longitude"
+            "site id", "site name", "latitude", "longitude", "type",
         )
         return df

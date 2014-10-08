@@ -58,10 +58,14 @@ function showData(ids, elem, labels) {
             return (
                 dataset.group_id + '-' +
                 dataset.parameter + '-' +
-                dataset['site id']
+                dataset['site id'] + '-' +
+                dataset.type
             );
         })
         .label(function(dataset) {
+            if (dataset.type != '-') {
+                return dataset['site id'] + " " + dataset.type;
+            }
             return (
                 dataset.parameter +
                 ' at ' +

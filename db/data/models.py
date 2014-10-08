@@ -1,5 +1,8 @@
 from wq.db.contrib.dbio.models import IoModel
 from wq.db.contrib.dbio.signals import import_complete, new_metadata
+from wq.db.contrib.vera.models import (
+    BaseEvent, Result, create_eventresult_model
+)
 from wq.db.patterns import models
 from wq.db.rest.models import get_object_id, get_ct
 from wq.io.util import flattened
@@ -262,6 +265,23 @@ class Project(models.IdentifiedRelatedModel):
     @property
     def has_data(self):
         return any(req.completed for req in self.requests)
+
+
+class Event(BaseEvent):
+    type = models.CharField(max_length=10, null=True, blank=True)
+    date = models.DateField()
+
+    def __unicode__(self):
+        return "%s on %s%s" % (
+            self.site, self.date, "(%s)" % self.type if self.type else ""
+        )
+
+    class Meta:
+        unique_together = ("site", "date", "type")
+        ordering = ('-date', 'type')
+
+
+EventResult = create_eventresult_model(Event, Result)
 
 
 @receiver(import_complete)

@@ -59,6 +59,7 @@ function onFail($progress, data) {
 function onProgress($progress, data) {
     $progress.siblings('.message').html(data.message || "");
     var id = _getId($progress);
+    var last = $progress.data('last-current') || 0;
     if (!id)
         return;
 
@@ -69,6 +70,13 @@ function onProgress($progress, data) {
         map.createMap('datarequest', id);
         delete map.config.maps.datarequest.div;
         $progress.data('map-inited', true);
+    }
+
+    var $elems = $progress.siblings('svg');
+    if (data.stage == "data" && $elems.length && data.current >= last + 100) {
+        $elems.show();
+        graph.showData([id], $elems[0]);
+        $progress.data('last-current', data.current);
     }
 
     if (data.action) {
