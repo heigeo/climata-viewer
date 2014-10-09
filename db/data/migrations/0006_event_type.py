@@ -13,7 +13,7 @@ class Migration(SchemaMigration):
 
         # Adding field 'Event.type'
         db.add_column(u'data_event', 'type',
-                      self.gf('django.db.models.fields.CharField')(default='', max_length=10),
+                      self.gf('django.db.models.fields.CharField')(null=True, blank=True, max_length=10),
                       keep_default=False)
 
         # Adding unique constraint on 'Event', fields ['site', 'date', 'type']
@@ -21,7 +21,7 @@ class Migration(SchemaMigration):
 
         # Adding field 'EventResult.event_type'
         db.add_column('wq_eventresult', 'event_type',
-                      self.gf('django.db.models.fields.CharField')(default='', max_length=10),
+                      self.gf('django.db.models.fields.CharField')(null=True, blank=True, max_length=10),
                       keep_default=False)
 
 
@@ -93,7 +93,7 @@ class Migration(SchemaMigration):
             'date': ('django.db.models.fields.DateField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'site': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['locations.Site']", 'null': 'True', 'blank': 'True'}),
-            'type': ('django.db.models.fields.CharField', [], {'max_length': '10', 'null': True', 'blank': 'True'})
+            'type': ('django.db.models.fields.CharField', [], {'max_length': '10', 'null': 'True', 'blank': 'True'})
         },
         u'data.eventresult': {
             'Meta': {'unique_together': "(('event', 'result_type'),)", 'object_name': 'EventResult', 'db_table': "'wq_eventresult'"},
