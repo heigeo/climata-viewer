@@ -9,7 +9,7 @@ class Command(BaseCommand):
 
     def handle(self, state, **options):
         counties = state_counties(state)
-        for fips, info in counties.items():
+        for fips, info in list(counties.items()):
             county = County.objects.find(fips)
             county.state = State.objects.find(info.state)
             county.save()

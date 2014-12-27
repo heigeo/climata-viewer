@@ -1,5 +1,5 @@
 from wq.db.patterns import models
-from wq.db.contrib.vera.models import BaseSite
+from vera.models import BaseSite
 from django.contrib.gis.geos import Point
 
 
@@ -37,8 +37,8 @@ class State(models.IdentifiedModel):
 class County(models.IdentifiedModel):
     state = models.ForeignKey(State, null=True)
 
-    def __unicode__(self):
-        label = super(County, self).__unicode__()
+    def __str__(self):
+        label = super(County, self).__str__()
         if self.state and self.state.primary_identifier:
             return "%s, %s" % (label, self.state.primary_identifier.slug)
         return label
@@ -48,5 +48,10 @@ class County(models.IdentifiedModel):
 
 
 class Basin(models.IdentifiedModel):
+    def __str__(self):
+        return "%s %s" % (
+            self.primary_identifier.slug, self.primary_identifier.name
+        )
+
     class Meta:
         ordering = ("primary_identifiers__slug",)

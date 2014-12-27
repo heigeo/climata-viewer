@@ -44,7 +44,7 @@
         <button type="submit">Update Columns</button>
         </form>
 
-        <form action="/datarequests/{{id}}/auto" method="post">
+        <form action="/datarequests/{{id}}/auto" method="post" data-json="false">
           {{>csrf}}
           <button type="submit">Continue</button>
         </form>

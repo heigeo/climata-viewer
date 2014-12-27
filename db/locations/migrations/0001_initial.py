@@ -1,69 +1,62 @@
 # -*- coding: utf-8 -*-
-from south.utils import datetime_utils as datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'Site'
-        db.create_table(u'locations_site', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        ))
-        db.send_create_signal(u'locations', ['Site'])
+    dependencies = [
+    ]
 
-        # Adding model 'State'
-        db.create_table(u'locations_state', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        ))
-        db.send_create_signal(u'locations', ['State'])
-
-        # Adding model 'County'
-        db.create_table(u'locations_county', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        ))
-        db.send_create_signal(u'locations', ['County'])
-
-        # Adding model 'Basin'
-        db.create_table(u'locations_basin', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        ))
-        db.send_create_signal(u'locations', ['Basin'])
-
-
-    def backwards(self, orm):
-        # Deleting model 'Site'
-        db.delete_table(u'locations_site')
-
-        # Deleting model 'State'
-        db.delete_table(u'locations_state')
-
-        # Deleting model 'County'
-        db.delete_table(u'locations_county')
-
-        # Deleting model 'Basin'
-        db.delete_table(u'locations_basin')
-
-
-    models = {
-        u'locations.basin': {
-            'Meta': {'ordering': "('primary_identifiers__slug',)", 'object_name': 'Basin'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
-        },
-        u'locations.county': {
-            'Meta': {'object_name': 'County'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
-        },
-        u'locations.site': {
-            'Meta': {'object_name': 'Site'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
-        },
-        u'locations.state': {
-            'Meta': {'object_name': 'State'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
-        }
-    }
-
-    complete_apps = ['locations']
+    operations = [
+        migrations.CreateModel(
+            name='Basin',
+            fields=[
+                ('id', models.AutoField(serialize=False, primary_key=True, verbose_name='ID', auto_created=True)),
+            ],
+            options={
+                'ordering': ('primary_identifiers__slug',),
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='County',
+            fields=[
+                ('id', models.AutoField(serialize=False, primary_key=True, verbose_name='ID', auto_created=True)),
+            ],
+            options={
+                'verbose_name_plural': 'counties',
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Site',
+            fields=[
+                ('id', models.AutoField(serialize=False, primary_key=True, verbose_name='ID', auto_created=True)),
+                ('name', models.CharField(blank=True, null=True, max_length=255)),
+                ('latitude', models.FloatField(blank=True, null=True)),
+                ('longitude', models.FloatField(blank=True, null=True)),
+            ],
+            options={
+                'abstract': False,
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='State',
+            fields=[
+                ('id', models.AutoField(serialize=False, primary_key=True, verbose_name='ID', auto_created=True)),
+            ],
+            options={
+                'abstract': False,
+            },
+            bases=(models.Model,),
+        ),
+        migrations.AddField(
+            model_name='county',
+            name='state',
+            field=models.ForeignKey(to='locations.State', null=True),
+            preserve_default=True,
+        ),
+    ]

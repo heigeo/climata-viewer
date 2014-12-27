@@ -3,6 +3,7 @@ progress {
 }
 li.ui-field-contain {
     border-bottom: 1px solid #ddd;
+    padding-bottom: 1em;
 }
 .error {
     color: red;

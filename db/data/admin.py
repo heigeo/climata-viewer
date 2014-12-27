@@ -3,7 +3,7 @@ from .models import Webservice, DataRequest, Project
 
 
 class DataRequestAdmin(admin.RelatedModelAdmin):
-    list_display = ('__unicode__', 'webservice', 'user')
+    list_display = ('__str__', 'webservice', 'user')
     list_filter = ('webservice', 'user')
 
 admin.site.register(Webservice, admin.IdentifiedModelAdmin)

@@ -3,7 +3,7 @@ from .models import Site, State, County, Basin
 
 
 class AuthedModelAdmin(admin.IdentifiedModelAdmin):
-    list_display = ['__unicode__', 'authority']
+    list_display = ['__str__', 'authority']
     list_filter = ['identifiers__authority']
 
     def authority(self, instance):

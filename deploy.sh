@@ -5,8 +5,8 @@ set -e
 
 # Save climata version and REST config to AMD modules
 cd db
-CLIMATA_VERSION=`python -c "from climata.version import VERSION; print VERSION"`;
-CONFIG=`./manage.py db_config`;
+CLIMATA_VERSION=`python3 -c "from climata.version import VERSION; print(VERSION)"`;
+CONFIG=`./manage.py dump_config`;
 cd ../
 echo "define(function(){return '$CLIMATA_VERSION';});" > app/js/data/climata_version.js
 echo "define($CONFIG);" > app/js/data/config.js

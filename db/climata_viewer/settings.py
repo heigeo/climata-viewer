@@ -36,16 +36,16 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.gis',
 
-    'south',
     'rest_framework',
 
     'wq.db.patterns.identify',
     'wq.db.patterns.annotate',
     'wq.db.patterns.relate',
+    'wq.db.rest',
     'wq.db.rest.auth',
-    'wq.db.contrib.vera',
+    'vera',
     'wq.db.contrib.files',
-    'wq.db.contrib.dbio',
+    'dbio',
 
     'locations',
     'data',

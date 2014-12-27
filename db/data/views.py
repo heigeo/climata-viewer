@@ -1,12 +1,12 @@
 from wq.db.rest.views import ModelViewSet
-from wq.db.contrib.dbio.views import IoViewSet
-from wq.db.contrib.chart.views import ChartView
+from dbio.views import IoViewSet
+from vera.views import ChartView
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import DataRequest
 from locations.models import Site
 from .models import Event
-from wq.db.contrib.vera.models import Report, Parameter
+from vera.models import Report, Parameter
 from django.utils.timezone import now
 
 
@@ -69,7 +69,7 @@ class ExportView(ChartView):
             dr = reqs.get(pk=extra[0])
 
         events = Event.objects.filter(
-            report__in=Report.objects.filter_by_related(dr)
+            report_set__in=Report.objects.filter_by_related(dr)
         )
         qs = qs.filter(event_id__in=events)
         if dr.parameter:

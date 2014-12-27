@@ -11,7 +11,7 @@ class Command(BaseCommand):
     def handle(self, shapefile, code, **options):
         watersheds = GisIO(filename=shapefile)
         huc8s = get_huc8(code)
-        for id, watershed in watersheds.items():
+        for id, watershed in list(watersheds.items()):
             if watershed.huc_code not in huc8s:
                 continue
             basin = Basin.objects.find(watershed.huc_code)

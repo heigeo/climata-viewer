@@ -14,6 +14,8 @@ graph.setup();
 maps.setup();
 layers.setup();
 
+app.jqmInit();
+
 $('document').ready(function() {
     graph.showLatest();
     login.prefetch();

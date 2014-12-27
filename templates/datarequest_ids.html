@@ -72,7 +72,7 @@
         </form>
 
         {{^result.unknown_count}}
-        <form action="/datarequests/{{id}}/auto" method="post">
+        <form action="/datarequests/{{id}}/auto" method="post" data-json="false">
           {{>csrf}}
           <button type="submit">Continue</button>
         </form>

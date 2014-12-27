@@ -1,6 +1,6 @@
-from wq.db.contrib.dbio.models import IoModel
-from wq.db.contrib.dbio.signals import import_complete, new_metadata
-from wq.db.contrib.vera.models import (
+from dbio.models import IoModel
+from dbio.signals import import_complete, new_metadata
+from vera.models import (
     BaseEvent, Result, create_eventresult_model
 )
 from wq.db.patterns import models
@@ -33,7 +33,7 @@ class Webservice(models.Model):
     authority = models.ForeignKey('identify.Authority')
     class_name = models.CharField(max_length=255)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     @property
@@ -64,7 +64,7 @@ class Webservice(models.Model):
     @property
     def extra_options(self):
         options = []
-        for name, option in self.io_class.get_filter_options().items():
+        for name, option in list(self.io_class.get_filter_options().items()):
             if name in DEFAULT_OPTIONS:
                 continue
             options.append(self.describe_option(option, name))
@@ -128,7 +128,8 @@ class DataRequest(IoModel):
         return model.objects.all()
 
     _labels = {}
-    def __unicode__(self):
+
+    def __str__(self):
         if not self.webservice_id:
             return None
         if self.pk in DataRequest._labels:
@@ -271,7 +272,7 @@ class Event(BaseEvent):
     type = models.CharField(max_length=10, null=True, blank=True)
     date = models.DateField()
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s on %s%s" % (
             self.site, self.date, "(%s)" % self.type if self.type else ""
         )
