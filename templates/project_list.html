@@ -4,22 +4,31 @@
   <body{{>login_class}}>
     <div data-role="page">
       <div data-role="header">
-        <a href="/" data-icon="home" data-iconpos="notext">Home</a>
-        <h3>Project Folders</h3>
-        <a href="/projects/new" data-icon="plus" data-iconpos="right" class="login-shown">New Project Folder</a>
+        {{>home}}
+        <h3>Projects</h3>
+        <a href="/projects/new" data-theme="b" data-icon="plus" data-iconpos="right" class="login-shown">New Project</a>
       </div>
       <div data-role="header">
         <div data-role="navbar">
           <ul>
-            <li><a href="/datarequests/">Data Requests</a></li>
-            <li><a href="/projects/" class="ui-btn-active ui-state-persist">Project Folders</a></li>
+            {{#is_authenticated}}
+            <li><a href="/projects/?mine=true"{{#pages_info.params.mine}}{{>active}}{{/pages_info.params.mine}}>
+              My Projects
+            </a></li>
+            {{/is_authenticated}}
+            <li><a href="/projects/?public=true"{{#pages_info.params.public}}{{>active}}{{/pages_info.params.public}}>
+              Shared Projects
+            </a></li>
           </ul>
         </div>
       </div>
       <div data-role="content">
-        {{#is_authenticated}}
-        <p class="login-shown">Project Folders for {{user.username}}</p>
-        {{/is_authenticated}}
+        {{#is_authenticated}}{{#pages_info.params.mine}}
+        <p class="login-shown">Projects created by {{user.username}}</p>
+        {{/pages_info.params.mine}}{{/is_authenticated}}
+        {{#pages_info.params.public}}
+        <p>Shared Projects</p>
+        {{/pages_info.params.public}}
         <ul data-role="listview" data-filter="true" data-count-theme="b">
           {{#list}}
           {{^deleted}}
@@ -27,7 +36,7 @@
             <a href="/projects/{{id}}">
               <p class="ui-li-aside">{{created_label}}</p>
               {{#is_authenticated}}{{#public}}
-              <span class="ui-li-count">Public</span>
+              <span class="ui-li-count">Shared</span>
               {{/public}}{{/is_authenticated}}
               <h3>{{label}}</h3>
             </a>
@@ -35,9 +44,11 @@
           {{/deleted}}
           {{/list}}
           {{^list}}
-          <li data-icon="add" data-iconpos="right" class="login-shown">
+          {{#pages_info.params.mine}}
+          <li data-icon="plus" data-theme="b" class="login-shown">
             <a href="/projects/new">New Project Folder</a>
           </li>
+          {{/pages_info.params.mine}}
           {{/list}}
         </ul>
       </div>

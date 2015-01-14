@@ -6,11 +6,13 @@
   <body{{>login_class}}>
     <div data-role="page">
       <div data-role="header">
-        <a href="/" data-icon="home" data-iconpos="notext">Home</a>
+        {{>home}}
         <h3>{{label}}</h3>
       </div>
       <div data-role="content">
-        <table>
+        <p>{{description}}</p>
+        <table class="info">
+          <tr><td colspan=2><h3>Web Service</h3></td></tr>
           <tr>
             <th>Name</th>
             <td>{{label}}</th>
@@ -25,8 +27,20 @@
               {{#authority}}<a href="{{homepage}}">{{label}}</a>{{/authority}}
             </td>
           </tr>
+          <tr><td colspan=2><h3>Data Loader</h3></td></tr>
           <tr>
-            <th>Filters</th>
+            <th>Python Class</th>
+            <td>
+              {{#source_url}}
+              <a href="{{source_url}}">{{class_name}}</a>
+              {{/source_url}}
+              {{^source_url}}
+              <b>{{class_name}}</b>
+              {{/source_url}}
+            </td>
+          </tr>
+          <tr>
+            <th>Supported<br>Filters</th>
             <td>
             {{#opts}}
               {{^start_date.ignored}}&check; Start Date<br>{{/start_date.ignored}}
@@ -40,6 +54,18 @@
             </td>
           </tr>
         </table>
+        {{#is_authenticated}}
+        <ul data-role="listview" data-inset="true" class="login-shown">
+          <li data-theme="b">
+            <a href="/datarequests/new?webservice_id={{id}}">Request Data from {{label}}</a>
+          </li>
+          {{#current_project}}
+          <li>
+            <a href="/projects/{{id}}" data-direction="reverse">Cancel and Return to {{label}}</a>
+          </li>
+          {{/current_project}}
+        </ul>
+        {{/is_authenticated}}
       </div>
     </div>
   </body>

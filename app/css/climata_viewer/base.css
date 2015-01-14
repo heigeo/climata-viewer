@@ -9,8 +9,20 @@ li.ui-field-contain {
     color: red;
     text-align: center;
 }
-td, th {
-    text-align: center;
+table.info {
+    border-collapse: collapse;
+}
+table.info td, table.info th {
+    text-align: left;
+    border-bottom: 1px solid #ccc;
+    padding: 0.5em;
+}
+table.info th {
+    border-right: 3px solid #ccc;
+    padding-right: 1em;
+}
+table.info td {
+    padding-left: 1em;
 }
 .logged-in .logout-shown, .logged-out .login-shown {
     display: none;
@@ -23,8 +35,8 @@ td, th {
   float: right;
 }
 svg {
-  width: 600px;
-  height: 300px;
+  width: 100%;
+  height: auto;
 }
 pre {
   background-color: #fff;
@@ -35,4 +47,22 @@ pre {
 .map {
   border: 1px solid #333;
   height: 300px;
+}
+.map.small {
+  height: 200px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+.ui-li-count {
+  top: 70% !important;
+}
+.latest-project {
+  background-color: #eef;
+  border: 1px solid #aac;
+  color: #334466;
+  text-shadow: none !important;
+  margin: 1em;
+  padding: 1em;
+  text-align: center;
 }

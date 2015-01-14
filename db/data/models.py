@@ -14,6 +14,7 @@ from django.utils.timezone import now
 
 from rest_framework.settings import import_from_string
 import datetime
+import inspect
 
 
 DEFAULT_OPTIONS = (
@@ -32,6 +33,8 @@ class Webservice(models.Model):
     homepage = models.URLField()
     authority = models.ForeignKey('identify.Authority')
     class_name = models.CharField(max_length=255)
+    description = models.TextField()
+    slug = models.SlugField()
 
     def __str__(self):
         return self.name
@@ -39,6 +42,36 @@ class Webservice(models.Model):
     @property
     def io_class(self):
         return import_from_string(self.class_name, self.name)
+
+    @property
+    def source_file(self):
+        if self.class_name.startswith('climata.'):
+            filename = inspect.getfile(self.io_class)
+            return 'climata' + filename.split('climata')[1]
+        return None
+
+    @property
+    def source_lines(self):
+        if self.source_file:
+            lines, start = inspect.getsourcelines(self.io_class)
+            return (start, start + len(lines) - 1)
+        return None
+
+    _source_urls = {}
+
+    @property
+    def source_url(self):
+        if self.pk in Webservice._source_urls:
+            return Webservice._source_urls[self.pk]
+        if not self.source_file:
+            url = None
+        else:
+            url = "https://github.com/heigeo/climata/blob/master/"
+            url += self.source_file
+            if self.source_lines:
+                url += "#L%s-%s" % self.source_lines
+        Webservice._source_urls[self.pk] = url
+        return url
 
     def describe_option(self, option, name=None):
         return {
@@ -249,6 +282,10 @@ class DataRequest(IoModel):
             return projects[0].right
         return None
 
+    def toggle_public(self, val):
+        self.public = val
+        self.save()
+
     class Meta:
         ordering = ("-requested",)
 
@@ -261,11 +298,26 @@ class Project(models.IdentifiedRelatedModel):
 
     @property
     def requests(self):
-        return (rel.right for rel in self.relationships.all())
+        return DataRequest.objects.filter_by_related(self).filter(
+            deleted__isnull=True
+        )
 
     @property
     def has_data(self):
         return any(req.completed for req in self.requests)
+
+    def toggle_public(self, val):
+        self.public = val
+        self.save()
+        self.requests.update(
+            public=val
+        )
+
+    @property
+    def active_rels(self):
+        return self.relationships.filter(
+            to_object_id__in=self.requests.values_list('pk', flat=True)
+        )
 
 
 class Event(BaseEvent):

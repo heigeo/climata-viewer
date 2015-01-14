@@ -1,10 +1,36 @@
-@media screen and (min-width: 720px) {
+.responsive-grid .ui-block-b.grid-offset {
+    padding-top: 3em;
+}
+
+@media screen and (min-width: 50em) {
+    body {
+        background-color: #99a !important;
+    }
     .ui-page {
-        width: 700px !important;
+        width: 90% !important;
         position: relative !important;
+        margin-top: 2em;
+        margin-bottom: 2em;
         margin-left: auto;
         margin-right: auto;
-        border-left: 1px solid #999 !important;
-        border-right: 1px solid #999 !important;
+        border-top: 5px solid #334466 !important;
+        border-bottom: 2px solid #334466 !important;
+    }
+}
+
+@media screen and (max-width: 70em) {
+    .responsive-grid .ui-block-a,
+    .responsive-grid .ui-block-b {
+        width: 100%;
+        float: none;
+    }
+    .responsive-grid .ui-block-b.grid-offset {
+        padding-top: 0px;
+    }
+}
+
+@media screen and (min-width: 90em) {
+    .ui-page {
+        width: 80% !important;
     }
 }

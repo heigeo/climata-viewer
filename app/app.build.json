@@ -32,6 +32,10 @@
             "jsonp": "define"
         }
     ],
+    "scss": {
+        "indir": "scss",
+        "outdir": "css"
+    },
     "appcache": {
         "name": "climata_viewer.appcache",
         "css":  "css/climata_viewer.css",

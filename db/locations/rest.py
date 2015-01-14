@@ -29,5 +29,3 @@ app.router.register_model(
 
 # No cache_opts, there will probably never be more than 100 states
 app.router.register_model(State, per_page=100)
-
-app.router.add_page('index', {'url': ''})

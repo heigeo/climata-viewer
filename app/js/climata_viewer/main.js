@@ -16,9 +16,6 @@ layers.setup();
 
 app.jqmInit();
 
-$('document').ready(function() {
-    graph.showLatest();
-    login.prefetch();
-});
+$('document').ready(login.prefetch);
 
 });

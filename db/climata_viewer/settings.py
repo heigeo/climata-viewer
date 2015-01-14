@@ -47,6 +47,7 @@ INSTALLED_APPS = (
     'wq.db.contrib.files',
     'dbio',
 
+    'home',
     'locations',
     'data',
 )
@@ -76,7 +77,11 @@ TEMPLATE_CONTEXT_PROCESSORS = [
     'wq.db.rest.auth.context_processors.social_auth',
     'wq.db.rest.auth.context_processors.csrftoken',
     'wq.db.rest.context_processors.version',
+    'wq.db.rest.context_processors.pages_info',
+
     'data.context_processors.climata_version',
+    'data.context_processors.reset_color',
+    'data.context_processors.get_color',
 ]
 
 # wq: Recommended settings unique to wq.db
@@ -158,3 +163,19 @@ CACHES = {
         }
     }
 }
+
+COLOR_NAMES = [
+    'blue',
+    'green',
+    'purple',
+    'red',
+    'orange',
+]
+
+HEX_COLORS = [
+    '#4292c6',
+    '#41ab5d',
+    '#807dba',
+    '#ef3b2c',
+    '#f16913',
+]

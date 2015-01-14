@@ -3,21 +3,25 @@ from dbio.views import IoViewSet
 from vera.views import ChartView
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import DataRequest
+from .models import DataRequest, Project
 from locations.models import Site
 from .models import Event
 from vera.models import Report, Parameter
 from django.utils.timezone import now
+from django.utils.crypto import get_random_string
 
 
 class ToggleViewSet(ModelViewSet):
+    ignore_kwargs = ['mine']
+
     @action()
     def toggle(self, request, *args, **kwargs):
         self.retrieve(request, *args, **kwargs)
         obj = self.object
         if request.user == obj.user:
-            obj.public = True if request.POST.get("public", None) else False
-            obj.save()
+            obj.toggle_public(
+                True if request.POST.get("public", None) else False
+            )
         return Response({
             'public': obj.public
         })
@@ -41,17 +45,19 @@ class DataRequestViewSet(IoViewSet, ToggleViewSet):
         response = super(DataRequestViewSet, self).auto(
             request, *args, **kwargs
         )
-        links = [{
-            'url': '/',
-            'label': "Back to Home"
-        }]
+        links = []
         obj = self.object
         project = obj.project
         if project:
             links.append({
                 'url': '/projects/%s' % obj.get_object_id(project),
-                'label': "Back to Project: %s" % project,
+                'label': "Return to Project: %s" % project,
+                'important': True,
             })
+        links.append({
+            'url': '/',
+            'label': "Back to Home"
+        })
         response.data['links'] = links
         return response
 

@@ -5,44 +5,94 @@
     {{>head}}
   </head>
   <body{{>login_class}}>
-    <div data-role="page" class="ui-page" id="index">
-      <div data-role="header">
-        <h1>Climata Viewer</h1>
-      </div>
-      <div data-role="content">
-        {{>intro}}
-        <h3 style="clear:both;">Options</h3>
-        <ul data-role="listview" data-inset="true" class="login-shown">
-          <li><a href="/webservices">Request Data</a></li>
-          <li><a href="/datarequests/">View Previous Requests</a></li>
-          <li><a href="/projects/">View Project Folders</a></li>
-          <li><a href="/logout">Log Out</a></li>
-        </ul>
-        <ul data-role="listview" data-inset="true" class="logout-shown">
-          <li><a href="/login">Log in to Request Data</a></li>
-        </ul>
-
-        <h3>Recently Requested Data</h3>
-        <svg></svg>
-        <ul data-role="listview" data-inset="true">
-          <li><a href="/datarequests/">View More Data Requests</a></li>
-        </ul>
-
-        <h3>Source Packages</h3>
-        <div class="package">
-          <a href="https://github.com/heigeo/climata-viewer">climata-viewer</a> 
-          version {{version}}
-          {{>gh_start}}climata-viewer&type=fork{{>gh_end}}
-          {{>gh_start}}climata-viewer&type=watch{{>gh_end}}
+    <div data-role="page" class="ui-page" data-url="">
+      <div role="main">
+        <div class="ui-grid-a responsive-grid">
+          <div class="ui-block-a">
+            <div class="ui-content">
+              <p style="text-align:center">
+                <img src="/images/logo.png" style="width:80%;max-width:20em;">
+              </p>
+              {{>intro}}
+              <p>
+                To see what <b>Climata</b> can do, visit one of the existing
+                <a href="/projects/?public=true">Shared Projects</a>
+                created by other users, or start your own project
+                with the Data Tools below.
+              </p>
+              <h3>Data Tools</h3>
+              <p>
+                To request data from a
+                <a href="/webservices">supported web service</a>,
+                create a new project and then add data to the project.
+              </p>
+              <ul data-role="listview" data-inset="true" class="login-shown">
+                <li data-theme="b"><a href="/projects/new">Create New Project</a></li>
+                <li><a href="/projects/?mine=true">My Projects</a></li>
+                <li><a href="/projects/?public=true">Shared Projects</a></li>
+                <li><a href="/webservices/">Supported Web Services</a></li>
+                <li><a href="/logout">Log Out</a></li>
+              </ul>
+              <ul data-role="listview" data-inset="true" class="logout-shown">
+                <li data-theme="b"><a href="/login" data-theme="b">Log In to Create a Project</a></li>
+                <li><a href="/projects/?public=true">Shared Projects</a></li>
+                <li><a href="/webservices/">Supported Web Services</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="ui-block-b grid-offset">
+            {{#latest_project}}
+            <div class="ui-content latest-project">
+              <h2>
+                Latest Shared Project
+              </h2>
+              <h3>{{label}}</h3>
+              <datalist class="layer-list">
+                {{#relationships}}
+                <option data-item_id="{{item_id}}" data-item_label="{{item_label}}"></option>
+                {{/relationships}}
+              </datalist>
+              <svg style="cursor:pointer;" onclick="$.mobile.changePage('/projects/{{id}}');"></svg>
+              <div id="latest-map" class="small map" data-project-id="{{id}}"></div>
+              <ul data-role="listview" data-inset="true">
+                <li><a href="/projects/{{id}}">View Project: {{label}}</a></li>
+              </ul>
+            </div>
+            {{/latest_project}}
+          </div>
+          <hr style="clear:both;">
+          <div class="ui-block-a">
+            <div class="ui-content">
+              <h3>Source Code</h3>
+              <p>
+                <b>Climata</b> is maintained as two software
+                packages: a <b>Viewer</b> (this website), and a
+                standalone Python software <b>Library</b> to allow
+                software developers to integrate the data loading
+                capabilities in their own applications.  The source
+                code for both the Library and the Viewer is freely
+                available on GitHub.
+              </p>
+              <div class="package">
+                <a href="https://github.com/heigeo/climata">Climata Library</a>
+                version {{climata_version}}
+                {{>gh_start}}climata&type=fork{{>gh_end}}
+                {{>gh_start}}climata&type=watch{{>gh_end}}
+              </div>
+              <div class="package">
+                <a href="https://github.com/heigeo/climata-viewer">Climata Viewer</a>
+                version {{version}}
+                {{>gh_start}}climata-viewer&type=fork{{>gh_end}}
+                {{>gh_start}}climata-viewer&type=watch{{>gh_end}}
+              </div>
+            </div>
+          </div>
+          <div class="ui-block-b">
+            <div class="ui-content">
+              {{>outro}}
+            </div>
+          </div>
         </div>
-        <div class="package">
-          <a href="https://github.com/heigeo/climata">climata</a> 
-          version {{climata_version}}
-          {{>gh_start}}climata&type=fork{{>gh_end}}
-          {{>gh_start}}climata&type=watch{{>gh_end}}
-        </div>
-
-        {{>outro}}
       </div>
     </div>
   </body>

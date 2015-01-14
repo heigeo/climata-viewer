@@ -4,22 +4,10 @@
   <body{{>login_class}}>
     <div data-role="page">
       <div data-role="header">
-        <a href="/" data-icon="home" data-iconpos="notext">Home</a>
+        {{>home}}
         <h3>Data Requests</h3>
-        <a href="/webservices" data-icon="plus" data-iconpos="right" class="login-shown">New Request</a>
-      </div>
-      <div data-role="header">
-        <div data-role="navbar">
-          <ul>
-            <li><a href="/datarequests/" class="ui-btn-active ui-state-persist">Data Requests</a></li>
-            <li><a href="/projects/">Project Folders</a></li>
-          </ul>
-        </div>
       </div>
       <div data-role="content">
-        {{#is_authenticated}}
-        <p class="login-shown">Data Requests for {{user.username}}</p>
-        {{/is_authenticated}}
         <ul data-role="listview" data-filter="true" data-count-theme="b">
           {{#list}}
           {{^deleted}}
@@ -27,7 +15,7 @@
             <a href="/datarequests/{{id}}">
               <p class="ui-li-aside">{{requested_label}}</p>
               {{#is_authenticated}}{{#public}}
-              <span class="ui-li-count">Public</span>
+              <span class="ui-li-count">Shared</span>
               {{/public}}{{/is_authenticated}}
               <h3>{{webservice_label}}</h3>
               <p>{{label}}</p>

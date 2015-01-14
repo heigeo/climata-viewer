@@ -9,11 +9,8 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('identify', '0001_initial'),
-        migrations.swappable_dependency(settings.WQ_PARAMETER_MODEL),
-        migrations.swappable_dependency(settings.WQ_REPORT_MODEL),
+        ('locations', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        migrations.swappable_dependency(settings.WQ_RESULT_MODEL),
-        migrations.swappable_dependency(settings.WQ_SITE_MODEL),
     ]
 
     operations = [
@@ -48,27 +45,6 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='EventResult',
-            fields=[
-                ('id', models.PositiveIntegerField(serialize=False, primary_key=True)),
-                ('event_type', models.CharField(max_length=10, null=True, blank=True)),
-                ('event_date', models.DateField()),
-                ('result_value_numeric', models.FloatField(null=True, blank=True)),
-                ('result_value_text', models.TextField(null=True, blank=True)),
-                ('result_empty', models.BooleanField(default=False)),
-                ('event', models.ForeignKey(to=settings.WQ_EVENT_MODEL)),
-                ('event_site', models.ForeignKey(null=True, to=settings.WQ_SITE_MODEL, blank=True)),
-                ('result', models.ForeignKey(to=settings.WQ_RESULT_MODEL)),
-                ('result_report', models.ForeignKey(to=settings.WQ_REPORT_MODEL)),
-                ('result_type', models.ForeignKey(to=settings.WQ_PARAMETER_MODEL)),
-            ],
-            options={
-                'db_table': 'wq_eventresult',
-                'abstract': False,
-            },
-            bases=(models.Model,),
-        ),
-        migrations.CreateModel(
             name='Project',
             fields=[
                 ('id', models.AutoField(serialize=False, auto_created=True, primary_key=True, verbose_name='ID')),
@@ -94,10 +70,6 @@ class Migration(migrations.Migration):
             options={
             },
             bases=(models.Model,),
-        ),
-        migrations.AlterUniqueTogether(
-            name='eventresult',
-            unique_together=set([('event', 'result_type')]),
         ),
         migrations.AlterUniqueTogether(
             name='event',

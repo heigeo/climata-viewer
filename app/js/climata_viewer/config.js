@@ -52,6 +52,9 @@ config.defaults = {
             return info.webservice.opts[type_id].required;
         return false;
     },
+    'is_project': function() {
+        return _getRelType.call(this).from_type == 'project';
+    },
     'select_prompt': function() {
         var info = _getContextInfo.call(this);
         if (!info)
@@ -60,7 +63,7 @@ config.defaults = {
             return "Pick an option...";
         var type_id = info.reltype.from_type;
         if (type_id == 'project')
-            return "None";
+            return "New Project";
         return "Any / All";
     },
     'start_date': defaultYear + '-01-01',
@@ -73,8 +76,12 @@ function _getContextInfo() {
     if (!params.webservice_id || !this.type_id)
         return null;
     info.webservice = ds.find({'url': 'webservices'}, params.webservice_id);
-    info.reltype = ds.find({'url': 'relationshiptypes'}, this.type_id);
+    info.reltype = _getRelType.call(this);
     return info;
+}
+
+function _getRelType() {
+    return ds.find({'url': 'relationshiptypes'}, this.type_id);
 }
 
 config.transitions = {

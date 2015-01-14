@@ -6,44 +6,56 @@
   <body{{>login_class}}>
     <div data-role="page">
       <div data-role="header">
-        <a href="/" data-icon="home" data-iconpos="notext">Home</a>
+        {{>home}}
         <h3>{{label}}</h3>
       </div>
-      <div data-role="content">
-        <ul data-role="listview" data-inset="true" class="layer-list">
-          <li data-role="list-divider">Included Data</li>
-          {{reset_color}}
-          {{#relationships}}
-          <li data-item_id="{{item_id}}" data-item_label="{{item_label}}">
-            <a href="/{{item_url}}">
-              <img src="/images/{{get_color}}.png" class="ui-li-icon">
-              <h3>{{item_label}}</h3>
-            </a>
-          </li>
-          {{/relationships}}
+      <div role="main">
+        <div class="ui-grid-a responsive-grid">
+          <div class="ui-block-a">
+            <div class="ui-content">
+              <h3>{{label}}</h3>
+              <ul data-role="listview" data-inset="true" class="layer-list">
+                <li data-role="list-divider">Included Data</li>
+                {{reset_color}}
+                {{#relationships}}
+                <li data-item_id="{{item_id}}" data-item_label="{{item_label}}">
+                  <a href="/{{item_url}}">
+                    <img src="/images/{{get_color}}.png" class="ui-li-icon">
+                    <h3>{{item_label}}</h3>
+                  </a>
+                </li>
+                {{/relationships}}
 
-          {{#is_mine}}
-          <li data-icon="plus" class="login-shown" data-theme="b">
-            <a href="/webservices" data-theme="b" onclick="require('climata_viewer/login').setProject('{{id}}');">
-              Add Data
-            </a>
-          </li>
-          {{/is_mine}}
-        </ul>
+                {{#mine}}
+                <li data-icon="plus" class="login-shown" data-theme="b">
+                  <a href="/webservices" data-theme="b" onclick="require('climata_viewer/login').setProject('{{id}}');">
+                    Add Data
+                  </a>
+                </li>
+                {{/mine}}
+              </ul>
+            </div>
+          </div>
+          <div class="ui-block-b">
+            <div class="ui-content">
+              <div id="project-{{id}}-map" class="map"></div>
+            </div>
+          </div>
+        </div>
         {{#has_data}}
         <hr>
         <svg></svg>
-        <hr>
-        <div id="project-{{id}}-map" class="map"></div>
         {{/has_data}}
         <hr>
-        <table>
-          <tr><th>Created On</th><td>{{created_label}}</td></tr>
-          <tr><th>Created By</th><td>{{user_label}}</td></tr>
-          {{#is_mine}}
-          <tr class="login-shown"><th>Public</th><td>{{>toggle}}</td></tr>
-          {{/is_mine}}
-        </table>
+        <div class="ui-content">
+          <table class="info">
+            <tr><th>Created On</th><td>{{created_label}}</td></tr>
+            <tr><th>Created By</th><td>{{user_label}}</td></tr>
+            {{#mine}}
+            <tr class="login-shown"><th>Shared Publicly</th><td>{{>toggle}}</td></tr>
+            {{/mine}}
+          </table>
+        </div>
       </div>
     </div>
   </body>

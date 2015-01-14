@@ -19,7 +19,11 @@ Parameter = swapper.load_model('vera', 'Parameter')
 def user_filter(qs, request):
     query = Q(public=True)
     if request.user and request.user.is_authenticated():
-        query = query | Q(user=request.user)
+        user_query = Q(user=request.user)
+        if request.GET.get('mine', None):
+            query = user_query
+        else:
+            query = query | user_query
     return qs.filter(query).exclude(deleted__isnull=False)
 
 
@@ -30,6 +34,7 @@ def rel_filter(qs, request):
 app.router.register_model(
     Webservice,
     serializer=WebserviceSerializer,
+    lookup="slug",
 )
 app.router.register_model(
     DataRequest,

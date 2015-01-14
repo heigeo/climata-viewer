@@ -2,7 +2,12 @@
 rjsconf*
 
 css/lib
+css/themes.css
+
+scss/lib
+scss/compass
+
 js/lib
-js/*/templates.js
-js/*/version.js
-js/*/climata_version.js
+js/data/templates.js
+js/data/version.js
+js/data/climata_version.js

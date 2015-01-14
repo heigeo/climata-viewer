@@ -1,0 +1,37 @@
+@import "lib/wq/jquery-mobile";
+@import "compass/css3";
+
+@include jquery-mobile-theme(
+  $theme:       a,
+);
+
+$darkblue: #334466;
+$shadow: #333;
+
+@include jquery-mobile-theme(
+  $theme:       b,
+
+  $bar-bg:      $darkblue,
+  $bar-text:    white,
+  $bar-shadow:  $shadow,
+
+  $up-bg:       $darkblue,
+  $up-text:     white,
+  $up-shadow:   $shadow,
+
+  $down-bg:     $darkblue,
+  $down-text:   white,
+  $down-shadow: $shadow,
+
+  $hover-bg:    $darkblue,
+  $hover-text:   white,
+  $hover-shadow: $shadow,
+);
+
+$global-font: 'Raleway', sans-serif;
+
+@include jquery-mobile-global(
+    $font: $global-font,
+    $round: 0,
+    $btn-round: 0
+);

@@ -35,14 +35,21 @@ function prefetch() {
       'inverserelationships'
     ];
     _prefetch(meta);
-    _prefetch(user);
+    if (_listExists('projects') && _listExists('relationships')) {
+        _setLatestProject();
+    }
+    _prefetch(user, _setLatestProject);
 
-    function _prefetch(lists) {
+    function _prefetch(lists, then) {
         var data = {
             'url': 'multi',
             'lists': lists.join(',')
         };
-        ds.fetch(data, true, _saveResult, true);
+        ds.fetch(data, true, function(result) {
+            _saveResult(result);
+            if (then)
+                then();
+        }, true);
     }
 
     function _saveResult(result) {
@@ -52,6 +59,37 @@ function prefetch() {
             data = result[key];
             ds.setPageInfo(query, data);
             ds.set(query, data.list);
+            if (key == 'projects') {
+                _setLatestProject();
+            }
+        }
+    }
+    function _setLatestProject() {
+        ds.getList({'url': 'projects'}, function(plist) {
+            ds.getList({'url': 'relationships'}, function(rlist) {
+                tmpl.setDefault('latest_project',
+                    _latest.bind(this, plist, rlist)
+                );
+            });
+        });
+
+        function _latest(plist, rlist) {
+            var latest = null;
+            plist.forEach(function(project) {
+                if (!project['public'])
+                    return;
+                if (!latest || project.created > latest.created)
+                    latest = project;
+            });
+            if (!latest)
+                return;
+            return {
+                'id': latest.id,
+                'label': latest.label,
+                'relationships': latest.relationships || rlist.filter({
+                    'project_id': latest.id
+                 })
+            };
         }
     }
 }
@@ -81,7 +119,7 @@ function _action(page, itemid, action, field, value, ontrue, onfalse) {
 function toggle(page, itemid, value) {
     _action(
         page, itemid, 'toggle', 'public', value,
-        "Set to Public", "Set to Private"
+        "Set to Shared", "Set to Private"
     );
 }
 
@@ -99,6 +137,9 @@ function del(page, itemid) {
 }
 
 function setProject(projectid) {
+    ds.getList({'url': 'projects'}, function(list) {
+        tmpl.setDefault('current_project', list.find(projectid));
+    });
     tmpl.setDefault('current', function() {
         return this.id == projectid;
     });
@@ -155,7 +196,7 @@ iropts.getChoiceListFilter = function(type, context) {
         return {'authority_id': webservice.authority_id};
     }
     if (type.from_type == 'project') {
-        return {'is_mine': true};
+        return {'mine': true};
     }
     return {};
 };
@@ -180,11 +221,26 @@ function _initFilters(match, ui, params, hash, evt, $page) {
 
         var $state = _getInput('state'),
             $basin = _getInput('basin'),
-            $county = _getInput('county');
+            $county = _getInput('county'),
+            $project = _getInput('project'),
+            $newproject = $page.find('.new-project'),
+            $projname = $newproject.find('input');
 
         // Auto-filter county by state
         if ($state.length) {
             $state.change(_filterByState);
+        }
+        // Hide New Project text input if existing project is set
+        if ($project.length && $projname.length) {
+            $project.change(function() {
+                if ($project.val()) {
+                    $newproject.hide();
+                    $projname.attr('required', false);
+                } else {
+                    $newproject.show();
+                    $projname.attr('required', true);
+                }
+            });
         }
 
         function _filterByState() {
@@ -216,6 +272,10 @@ function _initFilters(match, ui, params, hash, evt, $page) {
             });
         }
     });
+}
+
+function _listExists(url) {
+    return ds.exists({'url': url, 'page': 1});
 }
 
 return {

@@ -1,5 +1,7 @@
 <ul data-role="listview" data-inset="true">
   {{#links}}
-  <li><a href="{{url}}">{{label}}</a></li>
+  <li{{#important}} data-theme="b"{{/important}}>
+    <a href="{{url}}" data-direction="reverse">{{label}}</a>
+  </li>
   {{/links}}
 </ul>
