@@ -15,6 +15,18 @@ function _onShow(match, ui, params, hash, evt, $page) {
     _showGraph(baseurl, match[2], $page);
 }
 
+var supportsAutoHeight = (function() {
+    var test = d3.select('body').append('svg');
+    test.attr('viewBox', '0 0 100 100')
+       .style('width', '100%')
+       .style('height', 'auto');
+    var dims = test.node().getBoundingClientRect();
+    test.remove();
+    var result = (dims.height && dims.width == dims.height);
+    console.log("supports auto " + result);
+    return result;
+})();
+
 function _showGraph(baseurl, itemid, $page) {
     var ids, labels, $elems;
     if (baseurl == "datarequests") {
@@ -35,6 +47,17 @@ function _showGraph(baseurl, itemid, $page) {
 }
 
 function showData(ids, elem, labels) {
+    if (!elem) {
+        return;
+    }
+    var width = (
+        elem.parentNode && elem.parentNode.getBoundingClientRect().width
+    );
+    if (!width) {
+        // FIXME: use static image fallback per Django REST Pandas docs
+        elem.outerHTML = "<p>Sorry, this browser does not support the chart tool</p>";
+        return;
+    }
     var svg = d3.select(elem);
     var text = svg.append('text')
         .attr('transform', 'translate(50, 50)')
@@ -50,10 +73,10 @@ function showData(ids, elem, labels) {
         text.text("Loading Chart" + dots);
     }, 500);
 
-    var width = elem.parentElement.offsetWidth;
     var height = width * 0.5;
     if (height > 400)
         height = 400;
+    svg.style('height', height + "px");
     var plot = chart.timeSeries()
         .width(width)
         .height(height)
@@ -112,6 +135,9 @@ function showData(ids, elem, labels) {
             });
             data = data.concat(newdata);
             svg.datum(data).call(plot);
+            if (supportsAutoHeight) {
+                svg.style('height', 'auto');
+            }
         };
     }
 

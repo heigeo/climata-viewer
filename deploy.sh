@@ -20,6 +20,9 @@ cd ../;
 sed -i "s/climata_viewer.js/climata_viewer.js?v="$1"/" htdocs-build/climata_viewer.appcache
 sed -i "s/climata_viewer.css/climata_viewer.css?v="$1"/" htdocs-build/climata_viewer.appcache
 
+# Don't appcache fallback PNGs
+sed -i "s/css\/lib\/images\/icons-png\/.*//" htdocs-build/climata_viewer.appcache
+
 # Preserve Django's static files (e.g. admin)
 if [ -d htdocs/static ]; then
     cp -a htdocs/static htdocs-build/static

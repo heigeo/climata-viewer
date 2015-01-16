@@ -97,7 +97,15 @@ class RelationshipSerializer(RelationshipSerializer):
 
 class ProjectSerializer(MySerializer):
     has_data = Field()
-    relationships = RelationshipSerializer(source="active_rels")
+    def get_default_fields(self):
+        fields = super(ProjectSerializer, self).get_default_fields()
+        if 'request' in self.context and self.context['request'].POST:
+            pass
+        else:
+            fields['relationships'] = RelationshipSerializer(
+                source="active_rels",
+            )
+        return fields
 
 
 class UserSerializer(UserSerializer):
