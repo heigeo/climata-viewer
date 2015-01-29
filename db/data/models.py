@@ -103,6 +103,9 @@ class Webservice(models.Model):
             options.append(self.describe_option(option, name))
         return options
 
+    class Meta:
+        ordering = ("name",)
+
 
 class DataRequest(IoModel):
     user = models.ForeignKey('auth.User', null=True, blank=True)

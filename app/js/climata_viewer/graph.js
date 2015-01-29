@@ -58,6 +58,8 @@ function showData(ids, elem, labels) {
         elem.outerHTML = "<p>Sorry, this browser does not support the chart tool</p>";
         return;
     }
+    if (width < 640)
+        width = 640;
     var svg = d3.select(elem);
     var text = svg.append('text')
         .attr('transform', 'translate(50, 50)')
