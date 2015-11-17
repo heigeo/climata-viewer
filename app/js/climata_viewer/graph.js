@@ -23,7 +23,6 @@ var supportsAutoHeight = (function() {
     var dims = test.node().getBoundingClientRect();
     test.remove();
     var result = (dims.height && dims.width == dims.height);
-    console.log("supports auto " + result);
     return result;
 })();
 

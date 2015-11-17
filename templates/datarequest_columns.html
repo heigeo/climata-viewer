@@ -24,7 +24,7 @@
         <table>
           {{#result.columns}}
           <tr>
-            <th>{{match}}</th>
+            <th>{{name}}</th>
             <td>
               {{#unknown}}
               <select name="rel_{{rel_id}}">
@@ -36,6 +36,9 @@
                 </optgroup>
                 {{/types}}
               </select>
+              {{/unknown}}
+              {{^unknown}}
+              {{match}}
               {{/unknown}}
             </td>
           </tr>
